@@ -1,29 +1,6 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-type Pos = {
-  x: number;
-  y: number;
-} | null;
-
-type SelectRectProps = {
-  startPos?: Pos;
-  mouse: Pos;
-};
-
-type GetRectProps = {
-  start: Pos;
-  end: Pos;
-};
-
-function getRect({ start, end }: GetRectProps) {
-  return {
-    x: Math.min(start!.x, end!.x),
-    y: Math.min(start!.y, end!.y),
-    w: Math.abs(start!.x - end!.x),
-    h: Math.abs(start!.y - end!.y),
-  };
-}
+import { AppProps, SelectRectProps, AppLayoutProps } from "../utils/types";
+import { getRect } from "utils/tool";
 
 export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
   if (!startPos) return null;
@@ -64,21 +41,6 @@ export const DesktopContainer = styled.div.withConfig({
   z-index: 10;
 `;
 
-type AppProps = {
-  img?: string;
-  name?: string;
-  posX?: string;
-  posY?: string;
-  startPos: Pos;
-  handleDragging?: () => void;
-} & SelectRectProps;
-
-type AppLayoutProps = {
-  posX?: string;
-  posY?: string;
-  actived?: boolean;
-};
-
 const AppLayout = styled.div.withConfig({
   componentId: "AppLayout",
 })<AppLayoutProps>`
@@ -99,6 +61,7 @@ const AppLayout = styled.div.withConfig({
   .icon {
     width: 30px;
     height: 30px;
+    pointer-events: none;
 
     ${({ actived }) =>
       actived &&
@@ -119,6 +82,7 @@ const AppLayout = styled.div.withConfig({
     color: #fff;
     margin: 0.2rem;
     padding: 0 0.2rem;
+    pointer-events: none;
 
     ${({ actived }) =>
       actived &&
@@ -131,42 +95,24 @@ const AppLayout = styled.div.withConfig({
 
 export const DesktopApp = (props: AppProps) => {
   const {
-    posX = "100",
-    posY = "100",
+    posX = 100,
+    posY = 100,
     name = "tester",
-    startPos,
-    mouse,
-    handleDragging = () => {},
+    isActived,
+    handleDragging,
+    handleAppStatus = () => {},
   } = props;
-  const [actived, setActive] = useState<boolean>(false);
-  const handleClick = () => setActive((t) => !t);
-
-  useEffect(() => {
-    if (!startPos) return;
-
-    if (
-      checkRectCollision(
-        getRect({
-          start: { x: Number(posX), y: Number(posY) },
-          end: { x: Number(posX) + 50, y: Number(posY) + 50 },
-        }),
-        getRect({ start: startPos, end: mouse })
-      )
-    ) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  }, [posX, posY, mouse, startPos]);
 
   return (
     <AppLayout
       draggable
       posX={posX}
       posY={posY}
-      actived={actived}
-      onClick={handleClick}
+      actived={isActived}
+      onClick={handleAppStatus}
       onDragStart={handleDragging}
+      onDragEnd={handleDragging}
+      className="apps"
     >
       <div className="icon" />
       <div className="name">{name}</div>
@@ -182,25 +128,3 @@ type HeaderProps = {
 export const DesktopHeader = (props: HeaderProps) => {};
 
 export const DesktopFooter = () => {};
-
-type objectProps = {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-};
-
-function checkRectCollision(obj1: objectProps, obj2: objectProps) {
-  const { x: x1, y: y1, w: w1, h: h1 } = obj1;
-  const { x: x2, y: y2, w: w2, h: h2 } = obj2;
-
-  if (
-    x1 + w1 > x2 &&
-    x1 < x2 + w2 &&
-    y1 + h1 > y2 &&
-    y1 < y2 + h2 //
-  ) {
-    return true;
-  }
-  return false;
-}

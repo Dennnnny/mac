@@ -1,41 +1,73 @@
-import { useRef, useState, MouseEvent } from "react";
-import { useMouse } from "utils/tool";
+import { useRef, useState, MouseEvent, useEffect, useMemo } from "react";
+import { checkRectCollision, getRect, useMouse } from "utils/tool";
 import { Button, SelectRect, DesktopContainer, DesktopApp } from "ui";
 import { DesktopContext } from "./_app";
+import { AppProps } from "utils/types";
+
 export default function Web() {
   const ref = useRef(null);
   const mouse = useMouse(ref);
+  const mousePos = useMemo(() => ({ x: mouse.docX, y: mouse.docY }), [mouse]);
+
   const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(
     null
   );
   const apps = DesktopContext.useSelector((state) => state.context.apps);
+  const [state, send] = DesktopContext.useActor();
+
+  const currentMovement = DesktopContext.useSelector(
+    (state) => state.context.currentMovement
+  );
+
+  useEffect(() => {
+    if (!startPos) return;
+
+    const deaktopSelectRange = getRect({ start: startPos, end: mousePos });
+    apps.forEach((app) => {
+      const appRange = getRect({
+        start: { x: app.posX, y: app.posY },
+        end: { x: app.posX + 50, y: app.posY + 50 },
+      });
+      const isCollision = checkRectCollision(appRange, deaktopSelectRange);
+      if (isCollision && !app.isActived) {
+        send({ type: "app.focus", target: app.name });
+      } else if (!isCollision && app.isActived) {
+        send({ type: "app.unfocus", target: app.name });
+      }
+    });
+  }, [mousePos, startPos, apps, send]);
+
   function onMouseDownDesktop(e: MouseEvent<HTMLDivElement>) {
-    console.log(e.target, e.currentTarget, e.target === e.currentTarget);
     if (e.target === e.currentTarget) {
-      setStartPos(() => ({ x: mouse.docX, y: mouse.docY }));
+      setStartPos(() => mousePos);
+      send({ type: "app.unfocusAll" });
     }
   }
-  // console.log({ apps });
+
   function onMouseUpDesktop(e: MouseEvent<HTMLDivElement>) {
     setStartPos(() => null);
   }
 
-  function handleDrag(e: MouseEvent<HTMLElement>) {
-    // e.preventDefault();
-    console.log(e.type);
+  function handleDragging(app: AppProps): (e: MouseEvent<HTMLElement>) => void {
+    return (e: MouseEvent<HTMLElement>) => {
+      if (e.type === "dragstart") {
+        const tempX = e.clientX - app.posX;
+        const tempY = e.clientY - app.posY;
 
-    if (e.type === "dragstart") {
-      console.log("s", { e });
-    }
-  }
+        send({ type: "app.moving", tempX, tempY });
+      }
 
-  function handleDragEnd(e: MouseEvent<HTMLElement>) {
-    e.preventDefault();
-    console.log(e.type);
+      if (e.type === "dragend" && currentMovement != null) {
+        const dX = e.clientX - currentMovement.x - app.posX;
+        const dY = e.clientY - currentMovement.y - app.posY;
 
-    if (e.type === "dragend") {
-      console.log("end", { e });
-    }
+        send({
+          type: "app.placed",
+          dX,
+          dY,
+        });
+      }
+    };
   }
 
   return (
@@ -43,28 +75,20 @@ export default function Web() {
       ref={ref}
       onMouseUp={onMouseUpDesktop}
       onMouseDown={onMouseDownDesktop}
-      onDragStart={handleDrag}
-      onDragEnd={handleDragEnd}
-      // onMouseMove={handleDragOver}
     >
-      <SelectRect
-        startPos={startPos}
-        mouse={{ x: mouse.docX, y: mouse.docY }}
-      />
+      <SelectRect startPos={startPos} mouse={mousePos} />
       {apps.map((app, index) => {
         return (
           <DesktopApp
             name={app.name}
             key={`${app.name}-${index}`}
-            posX={`${app.position.x}`}
-            posY={`${app.position.y}`}
-            startPos={startPos}
-            mouse={{ x: mouse.docX, y: mouse.docY }}
-            handleDragging={() => {
-              console.log("dragging");
-              // return false;
+            posX={app.posX}
+            posY={app.posY}
+            isActived={app.isActived}
+            handleDragging={handleDragging(app)}
+            handleAppStatus={() => {
+              send({ type: "app.focus", target: app.name });
             }}
-            // handleApp={}
           />
         );
       })}
