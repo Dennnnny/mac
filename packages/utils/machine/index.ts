@@ -1,5 +1,6 @@
 import { createMachine, assign } from "xstate";
 import { AppProps, Pos } from "../types";
+import { FcFile } from "react-icons/fc";
 
 export const desktopMachine = createMachine(
   {
@@ -19,18 +20,18 @@ export const desktopMachine = createMachine(
     context: {
       apps: [
         {
-          name: "testing",
+          name: "testitestgsdgsdgsdgsdingttttng",
           posX: 100,
           posY: 100,
           isActived: false,
-          img: "null",
+          icon: null,
         },
         {
           name: "tester",
           posX: 200,
           posY: 50,
           isActived: false,
-          img: "none",
+          icon: FcFile,
         },
       ],
       currentMovement: null,

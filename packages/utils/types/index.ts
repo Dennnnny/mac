@@ -1,4 +1,5 @@
 import { MouseEvent } from "react";
+import { IconType } from "react-icons";
 
 export type Pos = {
   x: number;
@@ -23,7 +24,7 @@ export type SelectRectProps = {
 };
 
 export type AppProps = {
-  img?: string;
+  icon?: string | IconType | null;
   name: string;
   posX: number;
   posY: number;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { AppProps, SelectRectProps, AppLayoutProps } from "../utils/types";
 import { getRect } from "utils/tool";
+import { FcFile } from "react-icons/fc";
 
 export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
   if (!startPos) return null;
@@ -44,7 +45,6 @@ export const DesktopContainer = styled.div.withConfig({
 const AppLayout = styled.div.withConfig({
   componentId: "AppLayout",
 })<AppLayoutProps>`
-  border: 1px dashed #666;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,21 +53,30 @@ const AppLayout = styled.div.withConfig({
   transform: ${({ posX, posY }) =>
     `translate(${posX || "100"}px, ${posY || "100"}px)`};
   padding: 0.2rem 0 0 0;
+  width: 80px;
+  padding: 0.5rem 0 0 0;
 
   > * {
     box-sizing: border-box;
   }
 
   .icon {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     pointer-events: none;
-
+    margin: 1px;
     ${({ actived }) =>
       actived &&
       `
         border: 1px solid #666;
+        box-sizing: content-box;
+        background: #202020;
+        margin: 0px;
       `};
+
+    &.dashed {
+      border: 1px dashed #ccc;
+    }
   }
 
   .name {
@@ -81,9 +90,10 @@ const AppLayout = styled.div.withConfig({
     text-align: center;
     color: #fff;
     margin: 0.2rem;
-    padding: 0 0.2rem;
+    padding: 0.1rem 0.2rem;
     pointer-events: none;
-
+    font-size: 0.5rem;
+    text-shadow: 1px 1px 5px #0c0c0c;
     ${({ actived }) =>
       actived &&
       `
@@ -101,6 +111,7 @@ export const DesktopApp = (props: AppProps) => {
     isActived,
     handleDragging,
     handleAppStatus = () => {},
+    icon,
   } = props;
 
   return (
@@ -114,7 +125,11 @@ export const DesktopApp = (props: AppProps) => {
       onDragEnd={handleDragging}
       className="apps"
     >
-      <div className="icon" />
+      {icon != null ? (
+        <FcFile className="icon" />
+      ) : (
+        <div className="icon dashed" />
+      )}
       <div className="name">{name}</div>
     </AppLayout>
   );

@@ -82,6 +82,7 @@ export default function Web() {
           <DesktopApp
             name={app.name}
             key={`${app.name}-${index}`}
+            icon={app.icon}
             posX={app.posX}
             posY={app.posY}
             isActived={app.isActived}
