@@ -10,6 +10,7 @@ export const desktopMachine = createMachine(
       context: {} as { apps: AppProps[]; currentMovement: Pos },
       events: {} as
         | { type: "app.focus"; target?: string }
+        | { type: "app.singleAppFocus"; target?: string }
         | { type: "app.unfocus"; target: string }
         | { type: "app.unfocusAll" }
         | { type: "app.moving"; tempX: number; tempY: number }
@@ -42,6 +43,10 @@ export const desktopMachine = createMachine(
           "app.focus": {
             target: "idle",
             actions: ["setFocus"],
+          },
+          "app.singleAppFocus": {
+            target: "idle",
+            actions: ["setAllAppsUnfocus", "setFocus"],
           },
           "app.unfocus": {
             target: "idle",

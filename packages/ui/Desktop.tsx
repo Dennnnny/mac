@@ -120,7 +120,7 @@ export const DesktopApp = (props: AppProps) => {
       posX={posX}
       posY={posY}
       actived={isActived}
-      onClick={handleAppStatus}
+      onMouseDown={handleAppStatus}
       onDragStart={handleDragging}
       onDragEnd={handleDragging}
       className="apps"

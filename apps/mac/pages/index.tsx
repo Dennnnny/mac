@@ -88,7 +88,9 @@ export default function Web() {
             isActived={app.isActived}
             handleDragging={handleDragging(app)}
             handleAppStatus={() => {
-              send({ type: "app.focus", target: app.name });
+              if (!app.isActived) {
+                send({ type: "app.singleAppFocus", target: app.name });
+              }
             }}
           />
         );

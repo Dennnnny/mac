@@ -13,8 +13,8 @@ export interface Typegen0 {
     services: never;
   };
   eventsCausingActions: {
-    setAllAppsUnfocus: "app.unfocusAll";
-    setFocus: "app.focus";
+    setAllAppsUnfocus: "app.singleAppFocus" | "app.unfocusAll";
+    setFocus: "app.focus" | "app.singleAppFocus";
     setNewPosition: "app.placed";
     setTempPosition: "app.moving";
     setUnfocus: "app.unfocus";
