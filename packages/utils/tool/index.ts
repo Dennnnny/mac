@@ -1,4 +1,5 @@
 import useMouse from "react-use/lib/useMouse";
+import { useOnClickOutside } from "usehooks-ts";
 import { GetRectProps, objectProps } from "../types";
 export { useMouse };
 
@@ -25,3 +26,5 @@ export function checkRectCollision(obj1: objectProps, obj2: objectProps) {
   }
   return false;
 }
+
+export { useOnClickOutside };
