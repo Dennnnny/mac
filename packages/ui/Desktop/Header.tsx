@@ -53,7 +53,7 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
 
 type DesktopHeaderType = {
   type: string;
-  display: Element | string;
+  display: JSX.Element | string;
   structure?: {};
   iconAlt?: string;
 };
