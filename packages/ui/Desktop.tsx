@@ -16,7 +16,7 @@ export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
         height: h,
         position: "absolute",
         border: `1px solid gray`,
-        background: `rgba(255,255,255,0.5)`,
+        background: `rgba(255,255,255,0.2)`,
       }}
     />
   );
