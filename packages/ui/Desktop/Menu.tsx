@@ -1,7 +1,8 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { FaCaretRight } from "react-icons/fa";
 import styled from "styled-components";
+import { MenuItemType, MenuProps } from "utils/types";
 import { MenuConfig } from "./Header";
 
 export function HeaderMenu({
@@ -67,20 +68,23 @@ export function HeaderMenu({
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;
   type?: "default" | "header";
+  open?: boolean;
 };
 
 const MenuLayout = styled.div.withConfig({
   componentId: "MenuLayout",
 })<MenuLayoutProps>`
+  visibility: ${({ open }) => (open ? "visible" : "hidden")};
   color: #fff;
   user-select: none;
-  background-color: #323232cc;
+  background-color: #263245;
   padding-left: 1rem;
-  border: 0.1px solid #ccc;
+  border: 0.1px solid #44505e;
   box-sizing: border-box;
   width: fit-content;
   box-shadow: 0px 0px 10px rgba(10, 10, 10, 0.5);
   position: absolute;
+  backdrop-filter: blur(5px);
   transform: ${({ pos }) => `translate(${pos?.x}px,${pos?.y}px)`};
   ${({ type }) =>
     type === "header"
@@ -115,6 +119,7 @@ const MenuLayout = styled.div.withConfig({
       > span {
         display: flex;
         padding-right: 0.4rem;
+        pointer-events: none;
       }
     }
 
@@ -124,7 +129,7 @@ const MenuLayout = styled.div.withConfig({
   }
 `;
 
-const mockMenus: MenuItemType[] = [
+export const mockMenus: MenuItemType[] = [
   {
     新增檔案夾: {
       type: "actions",
@@ -181,21 +186,6 @@ const mockMenus: MenuItemType[] = [
   },
 ];
 
-type MenuItemType = {
-  [key: string]: {
-    type?: "actions" | "nested" | "disabled";
-    action?: string;
-    icon: () => JSX.Element;
-    menus?: MenuItemType[];
-  };
-};
-type MenuProps = {
-  open: boolean;
-  menus?: MenuItemType[];
-  pos: { x: number; y: number } | null;
-  type?: "default" | "header";
-};
-
 type nestedMenuType = {
   open: boolean;
   pos: { x: number; y: number } | null;
@@ -229,14 +219,20 @@ export function Menu({
     setNestedMenu(null);
   };
 
-  return open && menus.length > 0 ? (
+  useEffect(() => {
+    if (!open) {
+      setNestedMenu(null);
+    }
+  }, [open]);
+
+  return menus.length > 0 ? (
     <>
-      <MenuLayout pos={pos} type={type}>
+      <MenuLayout pos={pos} type={type} open={open} className="belong-menu">
         {menus.map((menuitem, index) => (
           <div
             className="menu-section"
             key={`menulist-${index}`}
-            style={index > 0 ? { borderTop: "2px solid #ccc" } : {}}
+            style={index > 0 ? { borderTop: "1.5px solid #4e5565" } : {}}
           >
             {Object.entries(menuitem).map(([key, value], index) => {
               return (
@@ -246,7 +242,7 @@ export function Menu({
                 >
                   {value.type === "nested" ? (
                     <div
-                      className="with-icon"
+                      className="belong-menu with-icon"
                       onMouseEnter={mouseEnter(value.menus ?? [])}
                     >
                       <p>{key}</p>
@@ -255,9 +251,7 @@ export function Menu({
                   ) : (
                     <div
                       onMouseEnter={mouseEnterNull}
-                      className={`${
-                        value.type === "disabled" ? "disabled" : "actions"
-                      }`}
+                      className={`belong-menu ${value.type}`}
                     >
                       <p>{key}</p>
                     </div>

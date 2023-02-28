@@ -39,3 +39,19 @@ export type AppLayoutProps = {
   posY?: number;
   actived?: boolean;
 };
+
+export type MenuItemType = {
+  [key: string]: {
+    type?: "actions" | "nested" | "disabled";
+    action?: string;
+    icon: () => JSX.Element;
+    menus?: MenuItemType[];
+  };
+};
+
+export type MenuProps = {
+  open: boolean;
+  menus?: MenuItemType[];
+  pos: { x: number; y: number } | null;
+  type?: "default" | "header";
+};
