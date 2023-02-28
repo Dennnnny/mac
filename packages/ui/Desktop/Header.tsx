@@ -1,8 +1,9 @@
-import { useRef, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import { FaApple, FaDocker } from "react-icons/fa";
 import styled from "styled-components";
 
 import { useOnClickOutside } from "utils/tool";
+import { MenuItemType } from "utils/types";
 import { Menu } from "./Menu";
 
 const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
@@ -58,12 +59,12 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
 type DesktopHeaderType = {
   type: string;
   display: JSX.Element | string;
-  menus?: [];
+  menus?: MenuItemType[];
   iconAlt?: string;
 };
 
 export type MenuConfig = {
-  posX?: number;
+  pos?: { x: number; y: number };
   id?: string;
 } & DesktopHeaderType;
 
@@ -73,17 +74,60 @@ export function DesktopHeader() {
       type: "icon",
       display: <FaApple />,
       iconAlt: "apple",
-      menus: [],
+      menus: [
+        {
+          "關於這台 Mac": {
+            type: "actions",
+            icon: () => <></>,
+          },
+        },
+        {
+          系統偏好設定: {
+            type: "actions",
+            icon: () => <></>,
+          },
+          "App store": {
+            type: "actions",
+            icon: () => <></>,
+          },
+        },
+      ],
     },
     {
       type: "text",
       display: "Code",
-      menus: [],
+      menus: [
+        {
+          "About this": {
+            type: "actions",
+            icon: () => <></>,
+          },
+          "restart to update": {
+            type: "actions",
+            icon: () => <></>,
+          },
+        },
+      ],
     },
     {
       type: "text",
       display: "File",
-      menus: [],
+      menus: [
+        {
+          "About this": {
+            type: "actions",
+            icon: () => <></>,
+          },
+          "restart to update": {
+            type: "actions",
+            icon: () => <></>,
+          },
+          "New Window": {
+            type: "actions",
+            icon: () => <></>,
+          },
+        },
+      ],
     },
     {
       type: "text",
@@ -114,23 +158,31 @@ export function DesktopHeader() {
 
   const [leftActive, setLeftActive] = useState(false);
 
-  const mouseOver = (data: any) => (e: any) => {
+  const mouseOver = (data: DesktopHeaderType) => (e: MouseEvent) => {
     if (leftActive) {
-      setCollect({ ...data, posX: e.currentTarget.getBoundingClientRect().x });
+      setCollect({
+        ...data,
+        pos: { x: e.currentTarget.getBoundingClientRect().x, y: 24 },
+      });
     }
   };
 
-  const myClick = (data: MenuConfig) => (e: any) => {
+  const myClick = (data: MenuConfig) => (e: MouseEvent) => {
     if (leftActive) {
       setCollect(null);
     } else {
-      setCollect({ ...data, posX: e.currentTarget.getBoundingClientRect().x });
+      setCollect({
+        ...data,
+        pos: { x: e.currentTarget.getBoundingClientRect().x, y: 24 },
+      });
     }
   };
 
-  const rightSideClick = (data: MenuConfig) => (e: any) => {
+  const rightSideClick = (data: MenuConfig) => (e: MouseEvent) => {
     setLeftActive(false);
-    setCollect({ ...data, posX: e.currentTarget.getBoundingClientRect().x });
+    setCollect({
+      ...data,
+    });
   };
 
   const ref = useRef(null);
@@ -141,70 +193,73 @@ export function DesktopHeader() {
   });
 
   return (
-    <HeaderLayout ref={ref}>
-      <div
-        className={`leftarea ${leftActive ? "actived" : ""} `}
-        onClick={() => setLeftActive((t) => !t)}
-      >
-        {leftArea.map((item, index) => {
-          const leftyIndex = `lefty-${index}`;
-          const ITEMS = { ...item, id: leftyIndex };
-          return item.type === "text" ? (
-            <div
-              key={index}
-              className={`textItem ${
-                collect?.id === leftyIndex ? "actived" : ""
-              }`}
-              onMouseEnter={mouseOver(ITEMS)}
-              onMouseDown={myClick(ITEMS)}
-            >
-              <div>{item.display}</div>
-            </div>
-          ) : (
-            <div
-              key={index}
-              className={`iconItem ${
-                collect?.id === leftyIndex ? "actived" : ""
-              }`}
-              onMouseEnter={mouseOver(ITEMS)}
-              onMouseDown={myClick(ITEMS)}
-            >
-              {item.display}
-            </div>
-          );
-        })}
-      </div>
-      <div className="rightarea">
-        {rightArea.map((item, index) => {
-          const rightyIndex = `righty-${index}`;
-          const ITEMS = { ...item, id: rightyIndex };
+    <>
+      <HeaderLayout ref={ref}>
+        <div
+          className={`leftarea ${leftActive ? "actived" : ""} `}
+          onClick={() => setLeftActive((t) => !t)}
+        >
+          {leftArea.map((item, index) => {
+            const leftyIndex = `lefty-${index}`;
+            const ITEMS = { ...item, id: leftyIndex };
+            return item.type === "text" ? (
+              <div
+                key={index}
+                className={`textItem ${
+                  collect?.id === leftyIndex ? "actived" : ""
+                }`}
+                onMouseEnter={mouseOver(ITEMS)}
+                onMouseDown={myClick(ITEMS)}
+              >
+                <div>{item.display}</div>
+              </div>
+            ) : (
+              <div
+                key={index}
+                className={`iconItem ${
+                  collect?.id === leftyIndex ? "actived" : ""
+                }`}
+                onMouseEnter={mouseOver(ITEMS)}
+                onMouseDown={myClick(ITEMS)}
+              >
+                {item.display}
+              </div>
+            );
+          })}
+        </div>
+        <div className="rightarea">
+          {rightArea.map((item, index) => {
+            const rightyIndex = `righty-${index}`;
+            const ITEMS = { ...item, id: rightyIndex };
 
-          return item.type === "text" ? (
-            <div
-              className={`textItem ${
-                collect?.id === rightyIndex ? "actived" : ""
-              }`}
-              onMouseDown={rightSideClick(ITEMS)}
-            >
-              <div>{item.display}</div>
-            </div>
-          ) : (
-            <div
-              className={`iconItem ${
-                collect?.id === rightyIndex ? "actived" : ""
-              }`}
-              onMouseDown={rightSideClick(ITEMS)}
-            >
-              {item.display}
-            </div>
-          );
-        })}
-      </div>
+            return item.type === "text" ? (
+              <div
+                className={`textItem ${
+                  collect?.id === rightyIndex ? "actived" : ""
+                }`}
+                onMouseDown={rightSideClick(ITEMS)}
+              >
+                <div>{item.display}</div>
+              </div>
+            ) : (
+              <div
+                className={`iconItem ${
+                  collect?.id === rightyIndex ? "actived" : ""
+                }`}
+                onMouseDown={rightSideClick(ITEMS)}
+              >
+                {item.display}
+              </div>
+            );
+          })}
+        </div>
+      </HeaderLayout>
       <Menu
         open={(collect && collect?.type.length !== 0) || false}
-        pos={{ x: 0, y: 0 }}
-        menus={[]}
+        pos={collect?.pos ?? { x: 0, y: 0 }}
+        menus={collect?.menus ?? []}
+        type="header"
       />
-    </HeaderLayout>
+    </>
   );
 }

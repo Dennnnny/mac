@@ -1,69 +1,7 @@
 import { MouseEvent, useEffect, useState } from "react";
-import { IconType } from "react-icons";
 import { FaCaretRight } from "react-icons/fa";
 import styled from "styled-components";
 import { MenuItemType, MenuProps } from "utils/types";
-import { MenuConfig } from "./Header";
-
-export function HeaderMenu({
-  open = false,
-  config,
-}: {
-  open?: boolean;
-  config?: MenuConfig | null;
-}) {
-  console.log({ config, open });
-  const menus = [
-    {
-      "About this": {
-        type: "actions",
-        action: "",
-        icon: "",
-      },
-      restart: {},
-      preference: {
-        type: "structure",
-        structure: {},
-      },
-    },
-    {
-      Abouddd: {
-        type: "actions",
-        action: "",
-        icon: "",
-      },
-      testing: {},
-      preference: {},
-    },
-  ];
-
-  return open ? (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        border: "1px solid red",
-        position: "absolute",
-        top: "24px",
-        left: `${config!.posX}px`,
-      }}
-    >
-      {menus.map((menuitem, index) => (
-        <div
-          key={`menulist-${index}`}
-          // style={index > 0 ? {} : {}}
-          style={index > 0 ? { borderTop: "2px solid blue" } : {}}
-        >
-          {Object.entries(menuitem).map(([key, value], index) => {
-            return <div key={`menuitem-${index}`}>{key}</div>;
-          })}
-        </div>
-      ))}
-    </div>
-  ) : null;
-}
-
-/////////////////////////
 
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;

@@ -7,10 +7,11 @@ import {
   useCallback,
 } from "react";
 import { checkRectCollision, getRect, useMouse } from "utils/tool";
-import { Button, SelectRect, DesktopContainer, DesktopApp } from "ui";
+import { SelectRect, DesktopContainer, DesktopApp } from "ui";
 import { Menu, mockMenus } from "ui/Desktop/Menu";
 import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
+import { DesktopHeader } from "ui/Desktop/Header";
 
 export default function Web() {
   const ref = useRef(null);
@@ -51,6 +52,8 @@ export default function Web() {
   const handleContextMenu = useCallback(
     (event: Event) => {
       event.preventDefault();
+      const target = event.target as Element;
+      if (target?.matches(".HeaderLayout")) return;
       send({
         type: "contextMenu.setting",
         pos: mousePos,
@@ -130,14 +133,12 @@ export default function Web() {
           />
         );
       })}
+      <DesktopHeader />
       <Menu
         open={contextMenu.open}
         pos={contextMenu.pos}
         menus={contextMenu.menus}
       />
-
-      <h1>Web</h1>
-      <Button />
     </DesktopContainer>
   );
 }
