@@ -3,13 +3,17 @@ import { FaApple, FaDocker } from "react-icons/fa";
 import styled from "styled-components";
 
 import { useOnClickOutside } from "utils/tool";
-import { HeaderMenu } from "./Menu";
+import { Menu } from "./Menu";
 
 const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
   height: 24px;
-  background: #1d1d1f;
+  background: #181d26;
   padding: 0 1rem;
   color: #fff;
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 15;
 
   display: flex;
   align-items: center;
@@ -26,7 +30,7 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
     &.actived {
       > div {
         :hover {
-          background-color: #1f4dd7;
+          background-color: #0661cb;
         }
       }
     }
@@ -45,7 +49,7 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
       height: 100%;
 
       &.actived {
-        background-color: #1f4dd7;
+        background-color: #0661cb;
       }
     }
   }
@@ -54,7 +58,7 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
 type DesktopHeaderType = {
   type: string;
   display: JSX.Element | string;
-  structure?: {};
+  menus?: [];
   iconAlt?: string;
 };
 
@@ -69,27 +73,27 @@ export function DesktopHeader() {
       type: "icon",
       display: <FaApple />,
       iconAlt: "apple",
-      structure: {},
+      menus: [],
     },
     {
       type: "text",
       display: "Code",
-      structure: {},
+      menus: [],
     },
     {
       type: "text",
       display: "File",
-      structure: {},
+      menus: [],
     },
     {
       type: "text",
       display: "Edit",
-      structure: {},
+      menus: [],
     },
     {
       type: "text",
       display: "Selection",
-      structure: {},
+      menus: [],
     },
   ];
 
@@ -97,12 +101,12 @@ export function DesktopHeader() {
     {
       type: "icon",
       display: <FaDocker />,
-      structure: {},
+      menus: [],
     },
     {
       type: "text",
       display: "Denny",
-      structure: {},
+      menus: [],
     },
   ];
 
@@ -196,9 +200,10 @@ export function DesktopHeader() {
           );
         })}
       </div>
-      <HeaderMenu
+      <Menu
         open={(collect && collect?.type.length !== 0) || false}
-        config={collect}
+        pos={{ x: 0, y: 0 }}
+        menus={[]}
       />
     </HeaderLayout>
   );

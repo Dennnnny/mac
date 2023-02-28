@@ -74,7 +74,8 @@ type MenuLayoutProps = {
 const MenuLayout = styled.div.withConfig({
   componentId: "MenuLayout",
 })<MenuLayoutProps>`
-  visibility: ${({ open }) => (open ? "visible" : "hidden")};
+  /* visibility: ${({ open }) => (open ? "visible" : "hidden")}; */
+  opacity: ${({ open }) => (open ? 1 : 0)};
   color: #fff;
   user-select: none;
   background-color: #263245;

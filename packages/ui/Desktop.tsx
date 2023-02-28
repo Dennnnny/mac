@@ -97,7 +97,7 @@ const AppLayout = styled.div.withConfig({
     ${({ actived }) =>
       actived &&
       `
-        background-color: #3c3cff;
+        background-color: #0158d0;
         border-radius: 0.5rem;
       `};
   }
