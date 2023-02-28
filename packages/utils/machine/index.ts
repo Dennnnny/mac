@@ -1,5 +1,5 @@
 import { createMachine, assign } from "xstate";
-import { AppProps, Pos } from "../types";
+import { AppProps, MenuItemType, MenuProps, Pos } from "../types";
 import { FcFile } from "react-icons/fc";
 
 export const desktopMachine = createMachine(
@@ -7,14 +7,20 @@ export const desktopMachine = createMachine(
     tsTypes: {} as import("./index.typegen").Typegen0,
     predictableActionArguments: true,
     schema: {
-      context: {} as { apps: AppProps[]; currentMovement: Pos },
+      context: {} as {
+        apps: AppProps[];
+        currentMovement: Pos;
+        contextMenu: MenuProps;
+      },
       events: {} as
         | { type: "app.focus"; target?: string }
         | { type: "app.singleAppFocus"; target?: string }
         | { type: "app.unfocus"; target: string }
         | { type: "app.unfocusAll" }
         | { type: "app.moving"; tempX: number; tempY: number }
-        | { type: "app.placed"; dX: number; dY: number },
+        | { type: "app.placed"; dX: number; dY: number }
+        | { type: "contextMenu.setting"; pos: Pos; menus: MenuItemType[] }
+        | { type: "contextMenu.clear" },
     },
     id: "desktop",
     initial: "idle",
@@ -36,6 +42,11 @@ export const desktopMachine = createMachine(
         },
       ],
       currentMovement: null,
+      contextMenu: {
+        open: false,
+        pos: { x: 0, y: 0 },
+        menus: [],
+      },
     },
     states: {
       idle: {
@@ -63,6 +74,14 @@ export const desktopMachine = createMachine(
           "app.placed": {
             target: "idle",
             actions: ["setNewPosition"],
+          },
+          "contextMenu.setting": {
+            target: "idle",
+            actions: ["setContextMenu"],
+          },
+          "contextMenu.clear": {
+            target: "idle",
+            actions: ["clearContextMenu"],
           },
         },
       },
@@ -131,6 +150,17 @@ export const desktopMachine = createMachine(
         const restApps = context.apps.filter((app) => !app.isActived);
 
         return { ...context, apps: [...restApps, ...targetApps] };
+      }),
+      setContextMenu: assign((context, event) => {
+        const { pos, menus } = event;
+
+        return { ...context, contextMenu: { open: true, pos, menus } };
+      }),
+      clearContextMenu: assign((context, event) => {
+        return {
+          ...context,
+          contextMenu: { open: false, pos: null, menus: [] },
+        };
       }),
     },
   }

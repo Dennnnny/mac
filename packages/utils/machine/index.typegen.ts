@@ -13,7 +13,9 @@ export interface Typegen0 {
     services: never;
   };
   eventsCausingActions: {
+    clearContextMenu: "contextMenu.clear";
     setAllAppsUnfocus: "app.singleAppFocus" | "app.unfocusAll";
+    setContextMenu: "contextMenu.setting";
     setFocus: "app.focus" | "app.singleAppFocus";
     setNewPosition: "app.placed";
     setTempPosition: "app.moving";

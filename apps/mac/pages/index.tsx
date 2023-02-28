@@ -1,6 +1,14 @@
-import { useRef, useState, MouseEvent, useEffect, useMemo } from "react";
+import {
+  useRef,
+  useState,
+  MouseEvent,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { checkRectCollision, getRect, useMouse } from "utils/tool";
 import { Button, SelectRect, DesktopContainer, DesktopApp } from "ui";
+import { Menu, mockMenus } from "ui/Desktop/Menu";
 import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
 
@@ -13,6 +21,9 @@ export default function Web() {
     null
   );
   const apps = DesktopContext.useSelector((state) => state.context.apps);
+  const contextMenu = DesktopContext.useSelector(
+    (state) => state.context.contextMenu
+  );
   const [state, send] = DesktopContext.useActor();
 
   const currentMovement = DesktopContext.useSelector(
@@ -37,10 +48,34 @@ export default function Web() {
     });
   }, [mousePos, startPos, apps, send]);
 
+  const handleContextMenu = useCallback(
+    (event: Event) => {
+      event.preventDefault();
+      send({
+        type: "contextMenu.setting",
+        pos: mousePos,
+        menus: mockMenus,
+      });
+    },
+    [mousePos, send]
+  );
+
+  useEffect(() => {
+    document.addEventListener("contextmenu", handleContextMenu);
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, [handleContextMenu]);
+
   function onMouseDownDesktop(e: MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) {
+    const target = e.target as Element;
+    if (target === e.currentTarget) {
       setStartPos(() => mousePos);
       send({ type: "app.unfocusAll" });
+    }
+
+    if (!target.parentElement?.matches(".belong-menu")) {
+      send({ type: "contextMenu.clear" });
     }
   }
 
@@ -95,6 +130,11 @@ export default function Web() {
           />
         );
       })}
+      <Menu
+        open={contextMenu.open}
+        pos={contextMenu.pos}
+        menus={contextMenu.menus}
+      />
 
       <h1>Web</h1>
       <Button />
