@@ -196,7 +196,7 @@ export function DesktopHeader() {
     <>
       <HeaderLayout ref={ref}>
         <div
-          className={`leftarea ${leftActive ? "actived" : ""} `}
+          className={`leftarea ${leftActive ? "actived" : ""}`}
           onClick={() => setLeftActive((t) => !t)}
         >
           {leftArea.map((item, index) => {
@@ -205,9 +205,7 @@ export function DesktopHeader() {
             return item.type === "text" ? (
               <div
                 key={index}
-                className={`textItem ${
-                  collect?.id === leftyIndex ? "actived" : ""
-                }`}
+                className={`textItem ${collect?.id === leftyIndex ? "actived" : ""}`}
                 onMouseEnter={mouseOver(ITEMS)}
                 onMouseDown={myClick(ITEMS)}
               >
@@ -216,9 +214,7 @@ export function DesktopHeader() {
             ) : (
               <div
                 key={index}
-                className={`iconItem ${
-                  collect?.id === leftyIndex ? "actived" : ""
-                }`}
+                className={`iconItem ${collect?.id === leftyIndex ? "actived" : ""}`}
                 onMouseEnter={mouseOver(ITEMS)}
                 onMouseDown={myClick(ITEMS)}
               >
@@ -234,18 +230,14 @@ export function DesktopHeader() {
 
             return item.type === "text" ? (
               <div
-                className={`textItem ${
-                  collect?.id === rightyIndex ? "actived" : ""
-                }`}
+                className={`textItem ${collect?.id === rightyIndex ? "actived" : ""}`}
                 onMouseDown={rightSideClick(ITEMS)}
               >
                 <div>{item.display}</div>
               </div>
             ) : (
               <div
-                className={`iconItem ${
-                  collect?.id === rightyIndex ? "actived" : ""
-                }`}
+                className={`iconItem ${collect?.id === rightyIndex ? "actived" : ""}`}
                 onMouseDown={rightSideClick(ITEMS)}
               >
                 {item.display}

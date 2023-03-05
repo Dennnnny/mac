@@ -50,8 +50,7 @@ const AppLayout = styled.div.withConfig({
   justify-content: center;
   align-items: center;
   position: absolute;
-  transform: ${({ posX, posY }) =>
-    `translate(${posX || "100"}px, ${posY || "100"}px)`};
+  transform: ${({ posX, posY }) => `translate(${posX || "100"}px, ${posY || "100"}px)`};
   padding: 0.2rem 0 0 0;
   width: 80px;
   padding: 0.5rem 0 0 0;
@@ -125,11 +124,7 @@ export const DesktopApp = (props: AppProps) => {
       onDragEnd={handleDragging}
       className="apps"
     >
-      {icon != null ? (
-        <FcFile className="icon" />
-      ) : (
-        <div className="icon dashed" />
-      )}
+      {icon != null ? <FcFile className="icon" /> : <div className="icon dashed" />}
       <div className="name">{name}</div>
     </AppLayout>
   );

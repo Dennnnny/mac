@@ -188,10 +188,18 @@ export function DesktopFooter() {
       <div className="footer-container belong-footer">
         {mockFooter.map((app, index) => {
           return (
-            <div key={index} className={`footer-item belong-footer ${app.isActived ? "actived" : ""}`}>
+            <div
+              key={index}
+              className={`footer-item belong-footer ${app.isActived ? "actived" : ""}`}
+            >
               <div className="app-title ">{app.title}</div>
               <div className="app-icon">
-                <Image className="belong-footer" fill={true} src={app.icon} alt={`${app.title}-icon`} />
+                <Image
+                  className="belong-footer"
+                  fill={true}
+                  src={app.icon}
+                  alt={`${app.title}-icon`}
+                />
               </div>
             </div>
           );

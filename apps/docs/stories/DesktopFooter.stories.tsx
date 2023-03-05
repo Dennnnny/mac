@@ -14,9 +14,7 @@ export default {
 } as ComponentMeta<typeof DesktopFooter>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof DesktopFooter> = (args) => (
-  <DesktopFooter />
-);
+const Template: ComponentStory<typeof DesktopFooter> = (args) => <DesktopFooter />;
 
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args

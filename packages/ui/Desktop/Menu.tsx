@@ -26,9 +26,7 @@ const MenuLayout = styled.div.withConfig({
   backdrop-filter: blur(5px);
   transform: ${({ pos }) => `translate(${pos?.x}px,${pos?.y}px)`};
   ${({ type }) =>
-    type === "header"
-      ? `border-radius: 0 0 0.3rem 0.3rem;`
-      : `border-radius: 0.3rem;`};
+    type === "header" ? `border-radius: 0 0 0.3rem 0.3rem;` : `border-radius: 0.3rem;`};
 
   .menu-section {
     padding: 0.2rem 0 0.25rem;
@@ -131,12 +129,7 @@ type nestedMenuType = {
   menus?: MenuItemType[];
 };
 
-export function Menu({
-  open,
-  pos,
-  menus = mockMenus,
-  type = "default",
-}: MenuProps) {
+export function Menu({ open, pos, menus = mockMenus, type = "default" }: MenuProps) {
   const [nestedMenu, setNestedMenu] = useState<nestedMenuType | null>({
     open: false,
     pos: null,
@@ -175,10 +168,7 @@ export function Menu({
           >
             {Object.entries(menuitem).map(([key, value], index) => {
               return (
-                <div
-                  className={`menu-item ${value.type}`}
-                  key={`menuitem-${index}`}
-                >
+                <div className={`menu-item ${value.type}`} key={`menuitem-${index}`}>
                   {value.type === "nested" ? (
                     <div
                       className="belong-menu with-icon"
@@ -188,10 +178,7 @@ export function Menu({
                       <span>{value.icon()}</span>
                     </div>
                   ) : (
-                    <div
-                      onMouseEnter={mouseEnterNull}
-                      className={`belong-menu ${value.type}`}
-                    >
+                    <div onMouseEnter={mouseEnterNull} className={`belong-menu ${value.type}`}>
                       <p>{key}</p>
                     </div>
                   )}
@@ -202,11 +189,7 @@ export function Menu({
         ))}
       </MenuLayout>
       {nestedMenu && (
-        <Menu
-          open={nestedMenu!.open}
-          pos={nestedMenu!.pos}
-          menus={nestedMenu!.menus ?? []}
-        />
+        <Menu open={nestedMenu!.open} pos={nestedMenu!.pos} menus={nestedMenu!.menus ?? []} />
       )}
     </>
   ) : null;

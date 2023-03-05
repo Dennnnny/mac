@@ -1,11 +1,4 @@
-import {
-  useRef,
-  useState,
-  MouseEvent,
-  useEffect,
-  useMemo,
-  useCallback,
-} from "react";
+import { useRef, useState, MouseEvent, useEffect, useMemo, useCallback } from "react";
 import { checkRectCollision, getRect, useMouse } from "utils/tool";
 import { SelectRect, DesktopContainer, DesktopApp } from "ui";
 import { Menu, mockMenus } from "ui/Desktop/Menu";
@@ -19,18 +12,12 @@ export default function Web() {
   const mouse = useMouse(ref);
   const mousePos = useMemo(() => ({ x: mouse.docX, y: mouse.docY }), [mouse]);
 
-  const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(
-    null
-  );
+  const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(null);
   const apps = DesktopContext.useSelector((state) => state.context.apps);
-  const contextMenu = DesktopContext.useSelector(
-    (state) => state.context.contextMenu
-  );
+  const contextMenu = DesktopContext.useSelector((state) => state.context.contextMenu);
   const [state, send] = DesktopContext.useActor();
 
-  const currentMovement = DesktopContext.useSelector(
-    (state) => state.context.currentMovement
-  );
+  const currentMovement = DesktopContext.useSelector((state) => state.context.currentMovement);
 
   useEffect(() => {
     if (!startPos) return;
@@ -110,11 +97,7 @@ export default function Web() {
   }
 
   return (
-    <DesktopContainer
-      ref={ref}
-      onMouseUp={onMouseUpDesktop}
-      onMouseDown={onMouseDownDesktop}
-    >
+    <DesktopContainer ref={ref} onMouseUp={onMouseUpDesktop} onMouseDown={onMouseDownDesktop}>
       <SelectRect startPos={startPos} mouse={mousePos} />
       {apps.map((app, index) => {
         return (
@@ -135,11 +118,7 @@ export default function Web() {
         );
       })}
       <DesktopHeader />
-      <Menu
-        open={contextMenu.open}
-        pos={contextMenu.pos}
-        menus={contextMenu.menus}
-      />
+      <Menu open={contextMenu.open} pos={contextMenu.pos} menus={contextMenu.menus} />
       <DesktopFooter />
     </DesktopContainer>
   );
