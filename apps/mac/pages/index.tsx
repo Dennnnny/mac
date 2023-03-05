@@ -6,6 +6,7 @@ import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
 import { DesktopHeader } from "ui/Desktop/Header";
 import { DesktopFooter } from "ui/Desktop/Footer";
+import Image from "next/image";
 
 export default function Web() {
   const ref = useRef(null);
@@ -120,6 +121,18 @@ export default function Web() {
       <DesktopHeader />
       <Menu open={contextMenu.open} pos={contextMenu.pos} menus={contextMenu.menus} />
       <DesktopFooter />
+      <Image
+        src="/bg.jpeg"
+        alt="background"
+        fill={true}
+        loading="eager"
+        style={{
+          objectFit: "cover",
+          objectPosition: "center",
+          zIndex: -1,
+          pointerEvents: "none",
+        }}
+      />
     </DesktopContainer>
   );
 }

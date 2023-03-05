@@ -33,9 +33,6 @@ export const DesktopContainer = styled.div.withConfig({
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("https://9to5mac.com/wp-content/uploads/sites/6/2018/06/mojave-night.jpg")
-    no-repeat center center fixed;
-  background-size: cover;
   *:not(input):not(textarea) {
     user-select: none;
   }
