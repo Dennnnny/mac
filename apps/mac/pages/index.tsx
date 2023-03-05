@@ -12,6 +12,7 @@ import { Menu, mockMenus } from "ui/Desktop/Menu";
 import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
 import { DesktopHeader } from "ui/Desktop/Header";
+import { DesktopFooter } from "ui/Desktop/Footer";
 
 export default function Web() {
   const ref = useRef(null);
@@ -53,7 +54,7 @@ export default function Web() {
     (event: Event) => {
       event.preventDefault();
       const target = event.target as Element;
-      if (target?.matches(".HeaderLayout")) return;
+      if (target?.matches(".HeaderLayout") || target?.matches(".belong-footer")) return;
       send({
         type: "contextMenu.setting",
         pos: mousePos,
@@ -139,6 +140,7 @@ export default function Web() {
         pos={contextMenu.pos}
         menus={contextMenu.menus}
       />
+      <DesktopFooter />
     </DesktopContainer>
   );
 }
