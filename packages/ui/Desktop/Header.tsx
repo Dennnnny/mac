@@ -204,7 +204,7 @@ export function DesktopHeader() {
             const ITEMS = { ...item, id: leftyIndex };
             return item.type === "text" ? (
               <div
-                key={index}
+                key={leftyIndex}
                 className={`textItem ${collect?.id === leftyIndex ? "actived" : ""}`}
                 onMouseEnter={mouseOver(ITEMS)}
                 onMouseDown={myClick(ITEMS)}
@@ -213,7 +213,7 @@ export function DesktopHeader() {
               </div>
             ) : (
               <div
-                key={index}
+                key={leftyIndex}
                 className={`iconItem ${collect?.id === leftyIndex ? "actived" : ""}`}
                 onMouseEnter={mouseOver(ITEMS)}
                 onMouseDown={myClick(ITEMS)}
@@ -230,6 +230,7 @@ export function DesktopHeader() {
 
             return item.type === "text" ? (
               <div
+                key={rightyIndex}
                 className={`textItem ${collect?.id === rightyIndex ? "actived" : ""}`}
                 onMouseDown={rightSideClick(ITEMS)}
               >
@@ -237,6 +238,7 @@ export function DesktopHeader() {
               </div>
             ) : (
               <div
+                key={rightyIndex}
                 className={`iconItem ${collect?.id === rightyIndex ? "actived" : ""}`}
                 onMouseDown={rightSideClick(ITEMS)}
               >
