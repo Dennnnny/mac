@@ -40,13 +40,15 @@ export type AppLayoutProps = {
   actived?: boolean;
 };
 
+export type MenuItemValueType = {
+  type?: "actions" | "nested" | "disabled";
+  action?: Function | string;
+  icon: () => JSX.Element;
+  menus?: MenuItemType[];
+};
+
 export type MenuItemType = {
-  [key: string]: {
-    type?: "actions" | "nested" | "disabled";
-    action?: string;
-    icon: () => JSX.Element;
-    menus?: MenuItemType[];
-  };
+  [key: string]: MenuItemValueType;
 };
 
 export type MenuProps = {

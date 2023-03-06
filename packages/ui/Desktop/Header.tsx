@@ -7,50 +7,52 @@ import { MenuItemType } from "utils/types";
 import { Menu } from "./Menu";
 
 const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
-  height: 24px;
-  background: #181d26;
-  padding: 0 1rem;
-  color: #fff;
-  position: absolute;
-  right: 0;
-  left: 0;
-  z-index: 15;
+  div.header {
+    height: 24px;
+    background: #181d26;
+    padding: 0 1rem;
+    color: #fff;
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 15;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  font-family: "system-ui";
-
-  div.rightarea,
-  div.leftarea {
     display: flex;
     align-items: center;
-    height: 100%;
-    user-select: none;
-    &.actived {
-      > div {
-        :hover {
-          background-color: #0661cb;
-        }
-      }
-    }
+    justify-content: space-between;
 
-    > div {
-      /* border: 1px dashed #ccc; */
-    }
+    font-family: "system-ui";
 
-    .iconItem,
-    .textItem {
-      cursor: default;
+    div.rightarea,
+    div.leftarea {
       display: flex;
       align-items: center;
-      padding: 1px 6px;
-      box-sizing: border-box;
       height: 100%;
-
+      user-select: none;
       &.actived {
-        background-color: #0661cb;
+        > div {
+          :hover {
+            background-color: #0661cb;
+          }
+        }
+      }
+
+      > div {
+        /* border: 1px dashed #ccc; */
+      }
+
+      .iconItem,
+      .textItem {
+        cursor: default;
+        display: flex;
+        align-items: center;
+        padding: 1px 6px;
+        box-sizing: border-box;
+        height: 100%;
+
+        &.actived {
+          background-color: #0661cb;
+        }
       }
     }
   }
@@ -79,16 +81,19 @@ export function DesktopHeader() {
           "關於這台 Mac": {
             type: "actions",
             icon: () => <></>,
+            action: (value: any) => console.log("!!!", value),
           },
         },
         {
           系統偏好設定: {
             type: "actions",
             icon: () => <></>,
+            action: "TESTER",
           },
           "App store": {
             type: "actions",
             icon: () => <></>,
+            action: () => {},
           },
         },
       ],
@@ -101,10 +106,12 @@ export function DesktopHeader() {
           "About this": {
             type: "actions",
             icon: () => <></>,
+            action: "TT",
           },
           "restart to update": {
             type: "actions",
             icon: () => <></>,
+            action: "QQ",
           },
         },
       ],
@@ -117,14 +124,17 @@ export function DesktopHeader() {
           "About this": {
             type: "actions",
             icon: () => <></>,
+            action: () => {},
           },
           "restart to update": {
             type: "actions",
             icon: () => <></>,
+            action: () => {},
           },
           "New Window": {
             type: "actions",
             icon: () => <></>,
+            action: () => {},
           },
         },
       ],
@@ -193,8 +203,8 @@ export function DesktopHeader() {
   });
 
   return (
-    <>
-      <HeaderLayout ref={ref}>
+    <HeaderLayout ref={ref}>
+      <div className="header">
         <div
           className={`leftarea ${leftActive ? "actived" : ""}`}
           onClick={() => setLeftActive((t) => !t)}
@@ -247,13 +257,13 @@ export function DesktopHeader() {
             );
           })}
         </div>
-      </HeaderLayout>
+      </div>
       <Menu
         open={(collect && collect?.type.length !== 0) || false}
         pos={collect?.pos ?? { x: 0, y: 0 }}
         menus={collect?.menus ?? []}
         type="header"
       />
-    </>
+    </HeaderLayout>
   );
 }

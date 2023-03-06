@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useState } from "react";
 import { FaCaretRight } from "react-icons/fa";
 import styled from "styled-components";
-import { MenuItemType, MenuProps } from "utils/types";
+import { MenuItemType, MenuItemValueType, MenuProps } from "utils/types";
 
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;
@@ -90,17 +90,17 @@ export const mockMenus: MenuItemType[] = [
         {
           Dennnny: {
             type: "disabled",
-            action: "",
+            action: "Denny",
             icon: () => <></>,
           },
           拍照: {
             type: "actions",
-            action: "",
+            action: "photo",
             icon: () => <></>,
           },
           掃描文件: {
             type: "actions",
-            action: "",
+            action: "scan",
             icon: () => <></>,
           },
         },
@@ -108,18 +108,24 @@ export const mockMenus: MenuItemType[] = [
     },
   },
   {
-    更改桌面背景: { type: "actions", action: "", icon: () => <></> },
-    使用堆疊: { type: "actions", action: "", icon: () => <></> },
+    更改桌面背景: { type: "actions", action: () => {}, icon: () => <></> },
+    使用堆疊: { type: "actions", action: () => {}, icon: () => <></> },
     排序方式: {
       type: "nested",
       icon: () => <FaCaretRight />,
+      action: () => {},
     },
     整理: { type: "actions", action: "", icon: () => <></> },
     整理方式: {
       type: "nested",
       icon: () => <FaCaretRight />,
+      action: () => {},
     },
-    打開顯示方式選項: { type: "actions", action: "", icon: () => <></> },
+    打開顯示方式選項: {
+      type: "actions",
+      action: () => {},
+      icon: () => <></>,
+    },
   },
 ];
 
@@ -157,6 +163,19 @@ export function Menu({ open, pos, menus = mockMenus, type = "default" }: MenuPro
     }
   }, [open]);
 
+  function handleClickMenu(item: MenuItemValueType) {
+    if (!item) return null;
+    if (item.type !== "actions") return null;
+
+    if (typeof item.action === "function") {
+      item.action();
+      return;
+    } else {
+      console.log("click::", item.action);
+      return;
+    }
+  }
+
   return menus.length > 0 ? (
     <>
       <MenuLayout pos={pos} type={type} open={open} className="belong-menu">
@@ -179,7 +198,7 @@ export function Menu({ open, pos, menus = mockMenus, type = "default" }: MenuPro
                     </div>
                   ) : (
                     <div onMouseEnter={mouseEnterNull} className={`belong-menu ${value.type}`}>
-                      <p>{key}</p>
+                      <p onClick={() => handleClickMenu(value)}>{key}</p>
                     </div>
                   )}
                 </div>
