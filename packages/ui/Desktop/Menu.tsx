@@ -78,7 +78,7 @@ export const mockMenus: MenuItemType[] = [
     取得資訊: {
       type: "actions",
       action: "",
-      icon: () => <></>,
+      icon: null,
     },
   },
   {
@@ -135,7 +135,13 @@ type nestedMenuType = {
   menus?: MenuItemType[];
 };
 
-export function Menu({ open, pos, menus = mockMenus, type = "default" }: MenuProps) {
+export function Menu({
+  open,
+  pos,
+  menus = mockMenus,
+  type = "default",
+  handleCloseMenu = () => {},
+}: MenuProps) {
   const [nestedMenu, setNestedMenu] = useState<nestedMenuType | null>({
     open: false,
     pos: null,
@@ -186,6 +192,8 @@ export function Menu({ open, pos, menus = mockMenus, type = "default" }: MenuPro
             style={index > 0 ? { borderTop: "1.5px solid #4e5565" } : {}}
           >
             {Object.entries(menuitem).map(([key, value], index) => {
+              const isIconExisted = value.icon != null;
+
               return (
                 <div className={`menu-item ${value.type}`} key={`menuitem-${index}`}>
                   {value.type === "nested" ? (
@@ -194,11 +202,19 @@ export function Menu({ open, pos, menus = mockMenus, type = "default" }: MenuPro
                       onMouseEnter={mouseEnter(value.menus ?? [])}
                     >
                       <p>{key}</p>
-                      <span>{value.icon()}</span>
+                      <span>{isIconExisted && value.icon!()}</span>
                     </div>
                   ) : (
                     <div onMouseEnter={mouseEnterNull} className={`belong-menu ${value.type}`}>
-                      <p onClick={() => handleClickMenu(value)}>{key}</p>
+                      <p
+                        onClick={() => {
+                          handleClickMenu(value);
+                          handleCloseMenu();
+                        }}
+                      >
+                        {key}
+                      </p>
+                      <span>{isIconExisted && value.icon!()}</span>
                     </div>
                   )}
                 </div>

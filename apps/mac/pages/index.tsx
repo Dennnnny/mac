@@ -120,7 +120,12 @@ export default function Web() {
         );
       })}
       <DesktopHeader />
-      <Menu open={contextMenu.open} pos={contextMenu.pos} menus={contextMenu.menus} />
+      <Menu
+        open={contextMenu.open}
+        pos={contextMenu.pos}
+        menus={contextMenu.menus}
+        handleCloseMenu={() => send({ type: "contextMenu.clear" })}
+      />
       <DesktopFooter />
       <Image
         src="/bg.jpeg"

@@ -45,7 +45,7 @@ export type AppLayoutProps = {
 export type MenuItemValueType = {
   type?: "actions" | "nested" | "disabled";
   action?: Function | string;
-  icon: () => JSX.Element;
+  icon: (() => JSX.Element) | null;
   menus?: MenuItemType[];
 };
 
@@ -58,4 +58,5 @@ export type MenuProps = {
   menus?: MenuItemType[];
   pos: { x: number; y: number } | null;
   type?: "default" | "header";
+  handleCloseMenu?: Function;
 };

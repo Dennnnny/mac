@@ -2,7 +2,7 @@ import { MouseEvent, useRef, useState } from "react";
 import { FaApple, FaDocker } from "react-icons/fa";
 import styled from "styled-components";
 
-import { useOnClickOutside } from "utils/tool";
+import { setFullscreen, useOnClickOutside } from "utils/tool";
 import { MenuItemType } from "utils/types";
 import { Menu } from "./Menu";
 
@@ -94,6 +94,11 @@ export function DesktopHeader() {
             type: "actions",
             icon: () => <></>,
             action: () => {},
+          },
+          全螢幕: {
+            type: "actions",
+            icon: () => <></>,
+            action: () => setFullscreen(),
           },
         },
       ],
@@ -263,6 +268,10 @@ export function DesktopHeader() {
         pos={collect?.pos ?? { x: 0, y: 0 }}
         menus={collect?.menus ?? []}
         type="header"
+        handleCloseMenu={() => {
+          setCollect(null);
+          setLeftActive(false);
+        }}
       />
     </HeaderLayout>
   );
