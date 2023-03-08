@@ -1,6 +1,6 @@
 import useMouse from "react-use/lib/useMouse";
 import { useOnClickOutside } from "usehooks-ts";
-import { GetRectProps, objectProps } from "../types";
+import { AppProps, GetRectProps, objectProps } from "../types";
 export { useMouse };
 
 export function getRect({ start, end }: GetRectProps) {
@@ -28,3 +28,21 @@ export function checkRectCollision(obj1: objectProps, obj2: objectProps) {
 }
 
 export { useOnClickOutside };
+
+export function handleClickApps<T extends AppProps>(item: T) {
+  if (!item) return null;
+
+  if (typeof item.action === "function") {
+    item.action();
+  } else {
+    console.log("click::", item.action);
+  }
+}
+
+export function setFullscreen() {
+  const element = document.documentElement;
+
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  }
+}

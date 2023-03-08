@@ -29,9 +29,11 @@ export type AppProps = {
   posX: number;
   posY: number;
   isActived?: boolean;
+  action?: string | Function;
   // handleDragging?: (e: MouseEvent<HTMLElement>) => void;
   handleDragging?: ((e: MouseEvent<HTMLElement>) => void) | undefined;
   handleAppStatus?: () => void;
+  handleDbClick?: () => void;
 };
 
 export type AppLayoutProps = {

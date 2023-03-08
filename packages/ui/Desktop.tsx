@@ -107,6 +107,7 @@ export const DesktopApp = (props: AppProps) => {
     isActived,
     handleDragging,
     handleAppStatus = () => {},
+    handleDbClick = () => {},
     icon,
   } = props;
 
@@ -119,6 +120,7 @@ export const DesktopApp = (props: AppProps) => {
       onMouseDown={handleAppStatus}
       onDragStart={handleDragging}
       onDragEnd={handleDragging}
+      onDoubleClick={handleDbClick}
       className="apps"
     >
       {icon != null ? <FcFile className="icon" /> : <div className="icon dashed" />}

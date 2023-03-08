@@ -1,5 +1,5 @@
 import { useRef, useState, MouseEvent, useEffect, useMemo, useCallback } from "react";
-import { checkRectCollision, getRect, useMouse } from "utils/tool";
+import { checkRectCollision, getRect, handleClickApps, useMouse } from "utils/tool";
 import { SelectRect, DesktopContainer, DesktopApp } from "ui";
 import { Menu, mockMenus } from "ui/Desktop/Menu";
 import { DesktopContext } from "./_app";
@@ -115,6 +115,7 @@ export default function Web() {
                 send({ type: "app.singleAppFocus", target: app.name });
               }
             }}
+            handleDbClick={() => handleClickApps(app)}
           />
         );
       })}

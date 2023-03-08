@@ -1,6 +1,7 @@
 import { createMachine, assign } from "xstate";
 import { AppProps, MenuItemType, MenuProps, Pos } from "../types";
-import { FcFile } from "react-icons/fc";
+import { FcFile, FcSearch } from "react-icons/fc";
+import { setFullscreen } from "../tool";
 
 export const desktopMachine = createMachine(
   {
@@ -27,11 +28,12 @@ export const desktopMachine = createMachine(
     context: {
       apps: [
         {
-          name: "testitestgsdgsdgsdgsdingttttng",
+          name: "click to fullpage",
           posX: 100,
           posY: 100,
           isActived: false,
-          icon: null,
+          icon: FcSearch,
+          action: () => setFullscreen(),
         },
         {
           name: "tester",
@@ -39,6 +41,7 @@ export const desktopMachine = createMachine(
           posY: 50,
           isActived: false,
           icon: FcFile,
+          action: "tester 2.0",
         },
       ],
       currentMovement: null,
