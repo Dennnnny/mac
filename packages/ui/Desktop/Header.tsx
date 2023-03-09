@@ -1,9 +1,9 @@
 import { MouseEvent, useRef, useState } from "react";
-import { FaApple, FaDocker } from "react-icons/fa";
 import styled from "styled-components";
 
-import { setFullscreen, useOnClickOutside } from "utils/tool";
-import { MenuItemType } from "utils/types";
+import { useOnClickOutside } from "utils/tool";
+import { DesktopHeaderType } from "utils/types";
+import { headerLeftArea, headerRightArea } from "../config/header-menus";
 import { Menu } from "./Menu";
 
 const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
@@ -58,117 +58,12 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
   }
 `;
 
-type DesktopHeaderType = {
-  type: string;
-  display: JSX.Element | string;
-  menus?: MenuItemType[];
-  iconAlt?: string;
-};
-
 export type MenuConfig = {
   pos?: { x: number; y: number };
   id?: string;
 } & DesktopHeaderType;
 
 export function DesktopHeader() {
-  const leftArea: DesktopHeaderType[] = [
-    {
-      type: "icon",
-      display: <FaApple />,
-      iconAlt: "apple",
-      menus: [
-        {
-          "關於這台 Mac": {
-            type: "actions",
-            icon: () => <></>,
-            action: (value: any) => console.log("!!!", value),
-          },
-        },
-        {
-          系統偏好設定: {
-            type: "actions",
-            icon: () => <></>,
-            action: "TESTER",
-          },
-          "App store": {
-            type: "actions",
-            icon: () => <></>,
-            action: () => {},
-          },
-          全螢幕: {
-            type: "actions",
-            icon: () => <></>,
-            action: () => setFullscreen(),
-          },
-        },
-      ],
-    },
-    {
-      type: "text",
-      display: "Code",
-      menus: [
-        {
-          "About this": {
-            type: "actions",
-            icon: () => <></>,
-            action: "TT",
-          },
-          "restart to update": {
-            type: "actions",
-            icon: () => <></>,
-            action: "QQ",
-          },
-        },
-      ],
-    },
-    {
-      type: "text",
-      display: "File",
-      menus: [
-        {
-          "About this": {
-            type: "actions",
-            icon: () => <></>,
-            action: () => {},
-          },
-          "restart to update": {
-            type: "actions",
-            icon: () => <></>,
-            action: () => {},
-          },
-          "New Window": {
-            type: "actions",
-            icon: () => <></>,
-            action: () => {},
-          },
-        },
-      ],
-    },
-    {
-      type: "text",
-      display: "Edit",
-      menus: [],
-    },
-    {
-      type: "text",
-      display: "Selection",
-      menus: [],
-    },
-  ];
-
-  const rightArea: DesktopHeaderType[] = [
-    {
-      type: "icon",
-      display: <FaDocker />,
-      menus: [],
-    },
-    {
-      type: "text",
-      display: "Denny",
-      menus: [],
-    },
-  ];
-
   const [collect, setCollect] = useState<MenuConfig | null>(null);
 
   const [leftActive, setLeftActive] = useState(false);
@@ -214,7 +109,7 @@ export function DesktopHeader() {
           className={`leftarea ${leftActive ? "actived" : ""}`}
           onClick={() => setLeftActive((t) => !t)}
         >
-          {leftArea.map((item, index) => {
+          {headerLeftArea.map((item, index) => {
             const leftyIndex = `lefty-${index}`;
             const ITEMS = { ...item, id: leftyIndex };
             return item.type === "text" ? (
@@ -239,7 +134,7 @@ export function DesktopHeader() {
           })}
         </div>
         <div className="rightarea">
-          {rightArea.map((item, index) => {
+          {headerRightArea.map((item, index) => {
             const rightyIndex = `righty-${index}`;
             const ITEMS = { ...item, id: rightyIndex };
 

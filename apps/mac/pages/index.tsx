@@ -1,7 +1,8 @@
 import { useRef, useState, MouseEvent, useEffect, useMemo, useCallback } from "react";
 import { checkRectCollision, getRect, handleClickApps, useMouse } from "utils/tool";
 import { SelectRect, DesktopContainer, DesktopApp } from "ui";
-import { Menu, mockMenus } from "ui/Desktop/Menu";
+import { Menu } from "ui/Desktop/Menu";
+import { desktopMenu } from "ui/config/desktop-menus";
 import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
 import { DesktopHeader } from "ui/Desktop/Header";
@@ -46,7 +47,7 @@ export default function Web() {
       send({
         type: "contextMenu.setting",
         pos: mousePos,
-        menus: mockMenus,
+        menus: desktopMenu,
       });
     },
     [mousePos, send]

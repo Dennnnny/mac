@@ -24,12 +24,13 @@ export type SelectRectProps = {
 };
 
 export type AppProps = {
-  icon?: string | IconType | null;
+  icon?: string | JSX.Element | null;
   name: string;
   posX: number;
   posY: number;
   isActived?: boolean;
   action?: string | Function;
+  menus?: MenuItemType[];
   // handleDragging?: (e: MouseEvent<HTMLElement>) => void;
   handleDragging?: ((e: MouseEvent<HTMLElement>) => void) | undefined;
   handleAppStatus?: () => void;
@@ -59,4 +60,18 @@ export type MenuProps = {
   pos: { x: number; y: number } | null;
   type?: "default" | "header";
   handleCloseMenu?: Function;
+};
+
+export type FooterType = {
+  title: string;
+  icon: string;
+  menus: MenuItemType[];
+  isActived: boolean;
+};
+
+export type DesktopHeaderType = {
+  type: string;
+  display: JSX.Element | string | IconType;
+  menus?: MenuItemType[];
+  iconAlt?: string;
 };

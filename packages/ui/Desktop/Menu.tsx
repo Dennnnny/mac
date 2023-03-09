@@ -1,7 +1,7 @@
 import { MouseEvent, useEffect, useState } from "react";
-import { FaCaretRight } from "react-icons/fa";
 import styled from "styled-components";
 import { MenuItemType, MenuItemValueType, MenuProps } from "utils/types";
+import { desktopMenu } from "../config/desktop-menus";
 
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;
@@ -66,69 +66,6 @@ const MenuLayout = styled.div.withConfig({
   }
 `;
 
-export const mockMenus: MenuItemType[] = [
-  {
-    新增檔案夾: {
-      type: "actions",
-      action: "",
-      icon: () => <></>,
-    },
-  },
-  {
-    取得資訊: {
-      type: "actions",
-      action: "",
-      icon: null,
-    },
-  },
-  {
-    "從「iphone」中輸入": {
-      type: "nested",
-      action: "",
-      icon: () => <FaCaretRight />,
-      menus: [
-        {
-          Dennnny: {
-            type: "disabled",
-            action: "Denny",
-            icon: () => <></>,
-          },
-          拍照: {
-            type: "actions",
-            action: "photo",
-            icon: () => <></>,
-          },
-          掃描文件: {
-            type: "actions",
-            action: "scan",
-            icon: () => <></>,
-          },
-        },
-      ],
-    },
-  },
-  {
-    更改桌面背景: { type: "actions", action: () => {}, icon: () => <></> },
-    使用堆疊: { type: "actions", action: () => {}, icon: () => <></> },
-    排序方式: {
-      type: "nested",
-      icon: () => <FaCaretRight />,
-      action: () => {},
-    },
-    整理: { type: "actions", action: "", icon: () => <></> },
-    整理方式: {
-      type: "nested",
-      icon: () => <FaCaretRight />,
-      action: () => {},
-    },
-    打開顯示方式選項: {
-      type: "actions",
-      action: () => {},
-      icon: () => <></>,
-    },
-  },
-];
-
 type nestedMenuType = {
   open: boolean;
   pos: { x: number; y: number } | null;
@@ -138,7 +75,7 @@ type nestedMenuType = {
 export function Menu({
   open,
   pos,
-  menus = mockMenus,
+  menus = desktopMenu,
   type = "default",
   handleCloseMenu = () => {},
 }: MenuProps) {

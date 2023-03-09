@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { AppProps, SelectRectProps, AppLayoutProps } from "../utils/types";
 import { getRect } from "utils/tool";
-import { IconType } from "react-icons";
 
 export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
   if (!startPos) return null;
@@ -111,8 +110,6 @@ export const DesktopApp = (props: AppProps) => {
     icon,
   } = props;
 
-  const IconComponent = icon as IconType;
-
   return (
     <AppLayout
       draggable
@@ -125,7 +122,7 @@ export const DesktopApp = (props: AppProps) => {
       onDoubleClick={handleDbClick}
       className="apps"
     >
-      {icon != null ? <IconComponent /> : <div className="icon dashed" />}
+      {icon != null ? icon : <div className="icon dashed" />}
       <div className="name">{name}</div>
     </AppLayout>
   );
