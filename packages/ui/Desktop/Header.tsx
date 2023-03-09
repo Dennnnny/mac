@@ -10,7 +10,7 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
   div.header {
     height: 24px;
     background: #181d26;
-    padding: 0 1rem;
+    padding: 0 0 0 1rem;
     color: #fff;
     position: absolute;
     right: 0;
@@ -42,7 +42,8 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
       }
 
       .iconItem,
-      .textItem {
+      .textItem,
+      .actionItem {
         cursor: default;
         display: flex;
         align-items: center;
@@ -51,6 +52,9 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
         height: 100%;
 
         &.actived {
+          background-color: #0661cb;
+        }
+        &:active {
           background-color: #0661cb;
         }
       }
@@ -138,13 +142,9 @@ export function DesktopHeader() {
             const rightyIndex = `righty-${index}`;
             const ITEMS = { ...item, id: rightyIndex };
 
-            return item.type === "text" ? (
-              <div
-                key={rightyIndex}
-                className={`textItem ${collect?.id === rightyIndex ? "actived" : ""}`}
-                onMouseDown={rightSideClick(ITEMS)}
-              >
-                <div>{item.display}</div>
+            return item.type === "action" ? (
+              <div key={rightyIndex} className={`actionItem`} onClick={rightSideClick(ITEMS)}>
+                {item.display}
               </div>
             ) : (
               <div

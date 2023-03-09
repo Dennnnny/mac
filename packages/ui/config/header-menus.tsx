@@ -1,6 +1,9 @@
 import { FaApple, FaDocker } from "react-icons/fa";
+import { FiAirplay, FiVolume2, FiWifi } from "react-icons/fi";
+import { HiOutlineSearch } from "react-icons/hi";
 import { setFullscreen } from "utils/tool";
 import { DesktopHeaderType } from "utils/types";
+import { Battery, DateAndTime, HeaderDrawer, LetterA, Siri, UmbrellaIcon } from "./icons";
 
 export const headerLeftArea: DesktopHeaderType[] = [
   {
@@ -94,8 +97,58 @@ export const headerRightArea: DesktopHeaderType[] = [
     menus: [],
   },
   {
+    type: "icon",
+    display: <UmbrellaIcon />,
+    menus: [],
+  },
+  {
+    type: "icon",
+    display: <FiAirplay />,
+    menus: [],
+  },
+  {
+    type: "icon",
+    display: <FiWifi />,
+    menus: [],
+  },
+  {
+    type: "icon",
+    display: <FiVolume2 />,
+    menus: [],
+  },
+  {
+    type: "icon",
+    display: <Battery />,
+    menus: [],
+  },
+  {
+    type: "icon",
+    display: <LetterA />,
+    menus: [],
+  },
+  {
+    type: "icon",
+    display: <DateAndTime />,
+    menus: [],
+  },
+  {
     type: "text",
     display: "Denny",
+    menus: [],
+  },
+  {
+    type: "action",
+    display: <HiOutlineSearch />,
+    menus: [],
+  },
+  {
+    type: "action",
+    display: <Siri />,
+    menus: [],
+  },
+  {
+    type: "action",
+    display: <HeaderDrawer />,
     menus: [],
   },
 ];
