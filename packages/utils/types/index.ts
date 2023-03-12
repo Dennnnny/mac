@@ -75,3 +75,8 @@ export type DesktopHeaderType = {
   menus?: MenuItemType[];
   iconAlt?: string;
 };
+
+export type FolderProps = {
+  size: { width: number; height: number };
+  pos: { x: number; y: number };
+};

@@ -1,6 +1,7 @@
 import { createMachine, assign } from "xstate";
-import { AppProps, MenuItemType, MenuProps, Pos } from "../types";
+import { AppProps, MenuItemType, MenuProps, Pos, FolderProps } from "../types";
 import { desktopApps } from "./desktop-apps";
+import { desktopFolders } from "./desktop-folders";
 
 export const desktopMachine = createMachine(
   {
@@ -11,6 +12,7 @@ export const desktopMachine = createMachine(
         apps: AppProps[];
         currentMovement: Pos;
         contextMenu: MenuProps;
+        folders: FolderProps[];
       },
       events: {} as
         | { type: "app.focus"; target?: string }
@@ -20,7 +22,8 @@ export const desktopMachine = createMachine(
         | { type: "app.moving"; tempX: number; tempY: number }
         | { type: "app.placed"; dX: number; dY: number }
         | { type: "contextMenu.setting"; pos: Pos; menus: MenuItemType[] }
-        | { type: "contextMenu.clear" },
+        | { type: "contextMenu.clear" }
+        | { type: "folder.resize"; payload: string; distance: number },
     },
     id: "desktop",
     initial: "idle",
@@ -32,6 +35,7 @@ export const desktopMachine = createMachine(
         pos: { x: 0, y: 0 },
         menus: [],
       },
+      folders: desktopFolders,
     },
     states: {
       idle: {
@@ -67,6 +71,10 @@ export const desktopMachine = createMachine(
           "contextMenu.clear": {
             target: "idle",
             actions: ["clearContextMenu"],
+          },
+          "folder.resize": {
+            target: "idle",
+            actions: ["setFolderSize"],
           },
         },
       },
@@ -146,6 +154,69 @@ export const desktopMachine = createMachine(
           ...context,
           contextMenu: { open: false, pos: null, menus: [] },
         };
+      }),
+      setFolderSize: assign((context, event) => {
+        const currentFolder = context.folders[0];
+
+        const restFolders = context.folders.filter((folder, index) => index !== 0);
+
+        const { width, height } = currentFolder.size;
+        const { pos } = currentFolder;
+        const type = event.payload;
+        const distance = event.distance;
+
+        switch (type) {
+          case "top":
+            return {
+              ...context,
+              folders: [
+                {
+                  ...currentFolder,
+                  size: { width, height: height + distance },
+                  pos: { ...pos, y: pos.y - distance },
+                },
+                ...restFolders,
+              ],
+            };
+          case "bottom":
+            return {
+              ...context,
+              folders: [
+                { ...currentFolder, size: { width, height: height + distance } },
+                ...restFolders,
+              ],
+            };
+          case "left":
+            return {
+              ...context,
+              folders: [
+                {
+                  ...currentFolder,
+                  size: { width: width + distance, height },
+                  pos: { ...pos, x: pos.x - distance },
+                },
+                ...restFolders,
+              ],
+            };
+          case "right":
+            return {
+              ...context,
+              folders: [
+                { ...currentFolder, size: { width: width + distance, height } },
+                ...restFolders,
+              ],
+            };
+          default:
+            return { ...context };
+        }
+
+        // return {
+        //   ...context,
+        //   folders: [
+        //     { ...currentFolder, size: { width: width + distance, height } },
+        //     ...restFolders,
+        //   ],
+        // };
       }),
     },
   }
