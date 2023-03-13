@@ -123,7 +123,7 @@ export function DesktopHeader() {
                 onMouseEnter={mouseOver(ITEMS)}
                 onMouseDown={myClick(ITEMS)}
               >
-                <div>{item.display}</div>
+                <>{item.display}</>
               </div>
             ) : (
               <div
@@ -132,7 +132,7 @@ export function DesktopHeader() {
                 onMouseEnter={mouseOver(ITEMS)}
                 onMouseDown={myClick(ITEMS)}
               >
-                {item.display}
+                <>{item.display}</>
               </div>
             );
           })}
@@ -144,7 +144,7 @@ export function DesktopHeader() {
 
             return item.type === "action" ? (
               <div key={rightyIndex} className={`actionItem`} onClick={rightSideClick(ITEMS)}>
-                {item.display}
+                <>{item.display}</>
               </div>
             ) : (
               <div
@@ -152,7 +152,7 @@ export function DesktopHeader() {
                 className={`iconItem ${collect?.id === rightyIndex ? "actived" : ""}`}
                 onMouseDown={rightSideClick(ITEMS)}
               >
-                {item.display}
+                <>{item.display}</>
               </div>
             );
           })}
