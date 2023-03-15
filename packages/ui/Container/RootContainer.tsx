@@ -1,17 +1,23 @@
 import { MouseEvent, useState } from "react";
 import styled from "styled-components";
 
+type SizePorp = { width: number; height: number };
+type PosPorp = { x: number; y: number };
+
 type RootContainerProps = {
   children: JSX.Element;
-  size: { width: number; height: number };
-  pos: { x: number; y: number };
-  handleResize: Function;
+  defaultSize: { width: number; height: number };
+  defaultPos: { x: number; y: number };
+  // handleResize: Function;
 };
 
 type RootContainerLayoutProps = {
   size?: { width: number; height: number };
   pos?: { x: number; y: number };
+  maxLength: number;
 };
+
+const maxLength = 100;
 
 const RootContainerLayout = styled.div.withConfig({
   componentId: "RootContainerLayout",
@@ -22,37 +28,107 @@ const RootContainerLayout = styled.div.withConfig({
     typeof size?.width === "number" ? `${size?.width}px` : `${size?.width}` ?? "100px"};
   height: ${({ size }) =>
     typeof size?.height === "number" ? `${size?.height}px` : `${size?.height}` ?? "100px"};
-  min-width: 30px;
-  min-height: 30px;
-  background-color: lightcyan;
+  min-width: ${({ maxLength }) => `${maxLength}px`};
+  min-height: ${({ maxLength }) => `${maxLength}px`};
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
 
   ::before {
   }
 `;
 
-export function RootContainer(props: RootContainerProps) {
-  const { size, pos, handleResize } = props;
+function generateNewResize(
+  resizeConfig: { size: SizePorp; pos: PosPorp },
+  type: string,
+  distance: number[]
+) {
+  const { pos, size } = resizeConfig;
+  const [distanceX, distanceY] = distance;
 
-  function handleDragging(type: string, distance: number) {
-    handleResize(type, distance);
+  switch (type) {
+    case "top":
+      return {
+        newSize: { width: size.width, height: size.height + distanceY },
+        newPos: { x: pos.x, y: pos.y - distanceY },
+      };
+    case "bottom":
+      return {
+        newSize: { width: size.width, height: size.height + distanceY },
+        newPos: { x: pos.x, y: pos.y },
+      };
+    case "left":
+      return {
+        newSize: { width: size.width + distanceX, height: size.height },
+        newPos: { x: pos.x - distanceX, y: pos.y },
+      };
+    case "right":
+      return {
+        newSize: { width: size.width + distanceX, height: size.height },
+        newPos: { x: pos.x, y: pos.y },
+      };
+    case "right-top":
+      return {
+        newSize: { width: size.width + distanceX, height: size.height + distanceY },
+        newPos: { x: pos.x, y: pos.y - distanceY },
+      };
+    case "right-bottom":
+      return {
+        newSize: { width: size.width + distanceX, height: size.height + distanceY },
+        newPos: { x: pos.x, y: pos.y },
+      };
+    case "left-top":
+      return {
+        newSize: { width: size.width + distanceX, height: size.height + distanceY },
+        newPos: { x: pos.x - distanceX, y: pos.y - distanceY },
+      };
+    case "left-bottom":
+      return {
+        newSize: { width: size.width + distanceX, height: size.height + distanceY },
+        newPos: { x: pos.x - distanceX, y: pos.y },
+      };
+    default:
+      return {
+        newSize: { width: size.width, height: size.height },
+        newPos: { x: pos.x, y: pos.y },
+      };
+  }
+}
+
+export function RootContainer(props: RootContainerProps) {
+  const { defaultSize, defaultPos, children } = props;
+
+  const [resizeConfig, setResize] = useState({ pos: defaultPos, size: defaultSize });
+  const { pos, size } = resizeConfig;
+
+  function handleDragging(type: string, distance: number[]) {
+    const { newPos, newSize } = generateNewResize(resizeConfig, type, distance);
+    setResize({ pos: newPos, size: newSize });
   }
 
   return (
-    <RootContainerLayout size={size} pos={pos}>
+    <RootContainerLayout size={size} pos={pos} maxLength={maxLength}>
       <Border pos={pos} type="top" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="right" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="bottom" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="left" size={size} handleDragging={handleDragging} />
+      <Corner pos={pos} type="left-top" size={size} handleDragging={handleDragging} />
+      <Corner pos={pos} type="right-top" size={size} handleDragging={handleDragging} />
+      <Corner pos={pos} type="left-bottom" size={size} handleDragging={handleDragging} />
+      <Corner pos={pos} type="right-bottom" size={size} handleDragging={handleDragging} />
+      {children}
     </RootContainerLayout>
   );
 }
 
-type BorderProps = {
+interface ResizeComponentProps {
   type: "top" | "right" | "bottom" | "left";
   size: { width: number; height: number };
   pos: { x: number; y: number };
-  handleResize?: Function;
   handleDragging?: Function;
+}
+
+type CornerProps = Omit<ResizeComponentProps, "type"> & {
+  type: "left-top" | "right-top" | "left-bottom" | "right-bottom";
 };
 
 type BorderLayoutProps = {
@@ -60,6 +136,10 @@ type BorderLayoutProps = {
   size?: { width: number; height: number };
   handleResize?: Function;
   press: boolean;
+};
+
+type CornerLayoutProps = Omit<BorderLayoutProps, "type"> & {
+  type: "left-top" | "right-top" | "left-bottom" | "right-bottom";
 };
 
 const borderStyles = (length: number = 0) => ({
@@ -89,8 +169,6 @@ const borderStyles = (length: number = 0) => ({
   },
 });
 
-// console.log(borderStyles().width.top)
-
 const BorderLayout = styled.div.withConfig({ componentId: "BorderLayout" })<BorderLayoutProps>`
   ${({ type, size }) => `
     width: ${borderStyles(size!.width).width[type]};
@@ -115,7 +193,7 @@ const BorderLayout = styled.div.withConfig({ componentId: "BorderLayout" })<Bord
       : ""};
 `;
 
-function Border({ type, size, pos, handleResize, handleDragging }: BorderProps) {
+function Border({ type, size, pos, handleDragging }: ResizeComponentProps) {
   const [press, setPress] = useState(false);
   return (
     <BorderLayout
@@ -127,9 +205,37 @@ function Border({ type, size, pos, handleResize, handleDragging }: BorderProps) 
       }}
       onMouseMove={(e) => {
         if (press) {
-          const distance = getDistance({ e, type, size, pos });
-          handleDragging!(type, distance);
+          const [distanceX, distanceY] = getDistance({ e, type, size, pos });
+          const isTypeHorizontal = type === "left" || type === "right";
+
+          if (
+            pos.y + size.height > window.innerHeight * 0.995 ||
+            pos.x + size.width > window.innerWidth
+          ) {
+            console.log("trigger");
+            handleDragging!(type, isTypeHorizontal ? [-3, 0] : [0, -3]);
+            setPress(false);
+            return;
+          }
+
+          if (pos.y < 24 || pos.x + distanceX <= 0) {
+            handleDragging!(type, isTypeHorizontal ? [-3, 0] : [0, -3]);
+            setPress(false);
+            return;
+          }
+
+          // each direction can use this one to detect inset distance less than 100
+          if (size.height + distanceY < maxLength || size.width + distanceX < maxLength) {
+            handleDragging!(type, [0, 0]);
+            // setPress(false);
+            return;
+          }
+
+          handleDragging!(type, [distanceX, distanceY]);
         }
+      }}
+      onMouseOut={() => {
+        setPress(false);
       }}
       onMouseUp={() => {
         setPress(false);
@@ -147,14 +253,97 @@ type getDistanceProps = {
 function getDistance({ e, type, size, pos }: getDistanceProps) {
   switch (type) {
     case "top":
-      return pos.y - e.clientY;
+      return [0, pos.y - e.clientY];
     case "bottom":
-      return e.clientY - size.height - pos.y;
+      return [0, e.clientY - (size.height + pos.y)];
     case "left":
-      return pos.x - e.clientX;
+      return [pos.x - e.clientX, 0];
     case "right":
-      return e.clientX - size!.width - pos!.x;
+      return [e.clientX - (size.width + pos.x), 0];
+    case "right-top":
+      return [e.clientX - (size.width + pos.x), pos.y - e.clientY];
+    case "right-bottom":
+      return [e.clientX - (size.width + pos.x), e.clientY - (size.height + pos.y)];
+    case "left-top":
+      return [pos.x - e.clientX, pos.y - e.clientY];
+    case "left-bottom":
+      return [pos.x - e.clientX, e.clientY - (size.height + pos.y)];
     default:
-      return 0;
+      return [0, 0];
   }
+}
+
+const cornerStyles = (width: number = 0, height: number = 0) => ({
+  translate: {
+    "left-top": ["0px", "0px"],
+    "right-top": [`${width - 5}px`, "0px"],
+    "left-bottom": ["0px", `${height - 5}px`],
+    "right-bottom": [`${width - 5}px`, `${height - 5}px`],
+  },
+  cursor: {
+    "left-top": "nwse-resize",
+    "right-top": "nesw-resize",
+    "left-bottom": "nesw-resize",
+    "right-bottom": "nwse-resize",
+  },
+});
+
+const CornerLayout = styled.div.withConfig({ componentId: "CornerLayout" })<CornerLayoutProps>`
+  width: 6px;
+  height: 6px;
+  position: absolute;
+
+  ${({ type, size }) => `
+    transform: translate(${cornerStyles(size!.width, size!.height).translate[type]});
+    :hover {
+      cursor: ${cornerStyles().cursor[type] ?? ""};
+    }
+  `};
+
+  ${({ press }) =>
+    press
+      ? `
+          width: 200vw;
+          height: 200vh;
+          transform: translate(-50%,-50%);
+        `
+      : ""};
+`;
+
+function Corner({ type, size, pos, handleDragging }: CornerProps) {
+  const [press, setPress] = useState(false);
+  return (
+    <CornerLayout
+      type={type}
+      size={size}
+      press={press}
+      onMouseDown={() => {
+        setPress(true);
+      }}
+      onMouseMove={(e) => {
+        if (press) {
+          const [distanceX, distanceY] = getDistance({ e, type, size, pos });
+
+          if (pos.y < 24 || pos.x + distanceX <= 0) {
+            handleDragging!(type, pos.y < 24 ? [distanceX, 0 - 3] : [-3, distanceY]);
+            return;
+          }
+
+          // // each direction can use this one to detect inset distance less than maxLength
+          if (size.height + distanceY < maxLength || size.width + distanceX < maxLength) {
+            handleDragging!(type, size.height + distanceY < 100 ? [distanceX, 0] : [0, distanceY]);
+            return;
+          }
+
+          handleDragging!(type, [distanceX, distanceY]);
+        }
+      }}
+      onMouseOut={() => {
+        setPress(false);
+      }}
+      onMouseUp={() => {
+        setPress(false);
+      }}
+    />
+  );
 }

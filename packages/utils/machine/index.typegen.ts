@@ -17,7 +17,6 @@ export interface Typegen0 {
     setAllAppsUnfocus: "app.singleAppFocus" | "app.unfocusAll";
     setContextMenu: "contextMenu.setting";
     setFocus: "app.focus" | "app.singleAppFocus";
-    setFolderSize: "folder.resize";
     setNewPosition: "app.placed";
     setTempPosition: "app.moving";
     setUnfocus: "app.unfocus";

@@ -124,14 +124,7 @@ export default function Web() {
       })}
       {folders.map((folder, index) => {
         return (
-          <RootContainer
-            key={index}
-            pos={folder.pos}
-            size={folder.size}
-            handleResize={(type: string, distance: number) => {
-              send({ type: "folder.resize", payload: type, distance });
-            }}
-          >
+          <RootContainer key={index} defaultPos={folder.pos} defaultSize={folder.size}>
             <></>
           </RootContainer>
         );
