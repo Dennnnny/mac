@@ -8,6 +8,7 @@ import { AppProps } from "utils/types";
 import { DesktopHeader } from "ui/Desktop/Header";
 import { DesktopFooter } from "ui/Desktop/Footer";
 import Image from "next/image";
+import Head from "next/head";
 
 export default function Web() {
   const ref = useRef(null);
@@ -99,47 +100,52 @@ export default function Web() {
   }
 
   return (
-    <DesktopContainer ref={ref} onMouseUp={onMouseUpDesktop} onMouseDown={onMouseDownDesktop}>
-      <SelectRect startPos={startPos} mouse={mousePos} />
-      {apps.map((app, index) => {
-        return (
-          <DesktopApp
-            name={app.name}
-            key={`${app.name}-${index}`}
-            icon={app.icon}
-            posX={app.posX}
-            posY={app.posY}
-            isActived={app.isActived}
-            handleDragging={handleDragging(app)}
-            handleAppStatus={() => {
-              if (!app.isActived) {
-                send({ type: "app.singleAppFocus", target: app.name });
-              }
-            }}
-            handleDbClick={() => handleClickApps(app)}
-          />
-        );
-      })}
-      <DesktopHeader />
-      <Menu
-        open={contextMenu.open}
-        pos={contextMenu.pos}
-        menus={contextMenu.menus}
-        handleCloseMenu={() => send({ type: "contextMenu.clear" })}
-      />
-      <DesktopFooter />
-      <Image
-        src="/bg.jpeg"
-        alt="background"
-        fill={true}
-        loading="eager"
-        style={{
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: -1,
-          pointerEvents: "none",
-        }}
-      />
-    </DesktopContainer>
+    <>
+      <Head>
+        <title>Denny&apos;s Mac clone</title>
+      </Head>
+      <DesktopContainer ref={ref} onMouseUp={onMouseUpDesktop} onMouseDown={onMouseDownDesktop}>
+        <SelectRect startPos={startPos} mouse={mousePos} />
+        {apps.map((app, index) => {
+          return (
+            <DesktopApp
+              name={app.name}
+              key={`${app.name}-${index}`}
+              icon={app.icon}
+              posX={app.posX}
+              posY={app.posY}
+              isActived={app.isActived}
+              handleDragging={handleDragging(app)}
+              handleAppStatus={() => {
+                if (!app.isActived) {
+                  send({ type: "app.singleAppFocus", target: app.name });
+                }
+              }}
+              handleDbClick={() => handleClickApps(app)}
+            />
+          );
+        })}
+        <DesktopHeader />
+        <Menu
+          open={contextMenu.open}
+          pos={contextMenu.pos}
+          menus={contextMenu.menus}
+          handleCloseMenu={() => send({ type: "contextMenu.clear" })}
+        />
+        <DesktopFooter />
+        <Image
+          src="/bg.jpeg"
+          alt="background"
+          fill={true}
+          loading="eager"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+            zIndex: -1,
+            pointerEvents: "none",
+          }}
+        />
+      </DesktopContainer>
+    </>
   );
 }
