@@ -127,6 +127,17 @@ export default function Web() {
             />
           );
         })}
+        {folders.map((folder, index) => {
+          return (
+            <RootContainer
+              key={`folder-${index}`}
+              defaultPos={folder.pos}
+              defaultSize={folder.size}
+            >
+              <>DEMO FOLDER</>
+            </RootContainer>
+          );
+        })}
         <DesktopHeader />
         <Menu
           open={contextMenu.open}

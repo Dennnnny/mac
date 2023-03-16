@@ -21,10 +21,17 @@ const RootContainerLayout = styled.div.withConfig({
   border: 1px solid #636465;
   border-radius: 0.25rem;
   box-shadow: 0px 0px 15px #080e19;
+
   > .body {
     height: calc(100% - 24px);
     background: #2e2e2e;
     border-radius: 0 0 0.25rem 0.25rem;
+
+    // put some style for now
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
   }
 
   ::before {
@@ -52,7 +59,7 @@ export function RootContainer(props: RootContainerProps) {
       <Corner pos={pos} type="right-top" size={size} handleDragging={handleDragging} />
       <Corner pos={pos} type="left-bottom" size={size} handleDragging={handleDragging} />
       <Corner pos={pos} type="right-bottom" size={size} handleDragging={handleDragging} />
-      <RootContainerHeader name="文件夾？" handleDragging={handleDragging} />
+      <RootContainerHeader name="文件夾" handleDragging={handleDragging} />
       <div className="body">{children}</div>
     </RootContainerLayout>
   );

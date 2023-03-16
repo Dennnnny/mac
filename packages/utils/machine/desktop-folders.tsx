@@ -1,8 +1,8 @@
 export const desktopFolders = [
   {
     name: "click to fullpage",
-    pos: { x: 100, y: 100 },
-    size: { width: 140, height: 140 },
+    pos: { x: 300, y: 300 },
+    size: { width: 300, height: 200 },
     isActived: false,
     menus: [],
   },
