@@ -35,8 +35,10 @@ export const LetterA = () => (
 );
 
 export const DateAndTime = () => {
-  const weekday = new Intl.DateTimeFormat("cn", { weekday: "short" }).format(new Date());
-  const time = new Intl.DateTimeFormat("cn", { timeStyle: "short" }).format(new Date());
+  const weekday = "週二";
+  const time = "晚上 12:15";
+  // const weekday = new Intl.DateTimeFormat("cn", { weekday: "short" }).format(new Date());
+  // const time = new Intl.DateTimeFormat("cn", { timeStyle: "short" }).format(new Date());
   return (
     <div style={{ fontSize: "14px" }}>
       {weekday} {time}

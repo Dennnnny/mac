@@ -1,6 +1,7 @@
 import { createMachine, assign } from "xstate";
-import { AppProps, MenuItemType, MenuProps, Pos } from "../types";
+import { AppProps, MenuItemType, MenuProps, Pos, FolderProps } from "../types";
 import { desktopApps } from "./desktop-apps";
+import { desktopFolders } from "./desktop-folders";
 
 export const desktopMachine = createMachine(
   {
@@ -11,6 +12,7 @@ export const desktopMachine = createMachine(
         apps: AppProps[];
         currentMovement: Pos;
         contextMenu: MenuProps;
+        folders: FolderProps[];
       },
       events: {} as
         | { type: "app.focus"; target?: string }
@@ -32,6 +34,7 @@ export const desktopMachine = createMachine(
         pos: { x: 0, y: 0 },
         menus: [],
       },
+      folders: desktopFolders,
     },
     states: {
       idle: {
