@@ -7,6 +7,7 @@ import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
 import { DesktopHeader } from "ui/Desktop/Header";
 import { DesktopFooter } from "ui/Desktop/Footer";
+import { RootContainer } from "ui/Container/RootContainer";
 import Image from "next/image";
 import Head from "next/head";
 
@@ -17,6 +18,7 @@ export default function Web() {
 
   const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(null);
   const apps = DesktopContext.useSelector((state) => state.context.apps);
+  const folders = DesktopContext.useSelector((state) => state.context.folders);
   const contextMenu = DesktopContext.useSelector((state) => state.context.contextMenu);
   const [state, send] = DesktopContext.useActor();
 

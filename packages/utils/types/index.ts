@@ -75,3 +75,57 @@ export type DesktopHeaderType = {
   menus?: MenuItemType[];
   iconAlt?: string;
 };
+
+export type FolderProps = {
+  size: { width: number; height: number };
+  pos: { x: number; y: number };
+};
+
+export type SizeProp = { width: number; height: number };
+export type PosProp = { x: number; y: number };
+
+export type RootContainerProps = {
+  children: JSX.Element;
+  defaultSize: { width: number; height: number };
+  defaultPos: { x: number; y: number };
+  // handleResize: Function;
+};
+
+export type RootContainerLayoutProps = {
+  size?: { width: number; height: number };
+  pos?: { x: number; y: number };
+  maxLength: number;
+};
+
+export interface ResizeComponentProps {
+  type: "top" | "right" | "bottom" | "left";
+  size: { width: number; height: number };
+  pos: { x: number; y: number };
+  handleDragging?: Function;
+}
+
+export type CornerProps = Omit<ResizeComponentProps, "type"> & {
+  type: "left-top" | "right-top" | "left-bottom" | "right-bottom";
+};
+
+export type BorderLayoutProps = {
+  type: "top" | "right" | "bottom" | "left";
+  size?: { width: number; height: number };
+  handleResize?: Function;
+  press: boolean;
+};
+
+export type CornerLayoutProps = Omit<BorderLayoutProps, "type"> & {
+  type: "left-top" | "right-top" | "left-bottom" | "right-bottom";
+};
+
+export type RootContainerHeaderLayoutProps = {
+  press: boolean;
+};
+
+export type getDistanceProps = {
+  e: MouseEvent;
+  type: string;
+  size: { width: number; height: number };
+  pos: { x: number; y: number };
+};
