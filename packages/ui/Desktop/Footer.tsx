@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import { footerMenus } from "../config/footer-menus";
+import { useEffect, useState } from "react";
 
 const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
   width: 100%;
@@ -38,6 +39,10 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
     align-items: center;
     text-align: center;
     width: 40px;
+
+    &.jump {
+      animation: jumping 1s cubic-bezier(0.35, 0.15, 0.25, 0.95) 2;
+    }
 
     .app-icon {
       width: 100%;
@@ -92,9 +97,40 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
       }
     }
   }
+
+  @keyframes jumping {
+    0% {
+      transform: translateY(0%);
+    }
+    50% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0%);
+    }
+  }
 `;
 
 export function DesktopFooter() {
+  const [animateIcons, setAnimateIcons] = useState<number[]>([]);
+
+  const handleClick = (index: number) => {
+    setAnimateIcons((prev) => [...new Set([...prev, index])]);
+  };
+
+  useEffect(() => {
+    if (animateIcons.length === 0) return;
+
+    const intervalId = setTimeout(() => {
+      setAnimateIcons([]);
+      clearTimeout(intervalId);
+    }, 2000);
+
+    return () => {
+      clearTimeout(intervalId);
+    };
+  }, [animateIcons]);
+
   return (
     <FooterLayout>
       <div className="footer-container belong-footer">
@@ -102,7 +138,12 @@ export function DesktopFooter() {
           return (
             <div
               key={index}
-              className={`footer-item belong-footer ${app.isActived ? "actived" : ""}`}
+              className={`footer-item belong-footer ${app.isActived ? "actived" : ""} ${
+                animateIcons.includes(index) ? "jump" : ""
+              }`}
+              onClick={() => {
+                !app.isActived ? handleClick(index) : () => {};
+              }}
             >
               <div className="app-title ">{app.title}</div>
               <div className="app-icon">
@@ -119,8 +160,4 @@ export function DesktopFooter() {
       </div>
     </FooterLayout>
   );
-}
-
-function FooterIcon() {
-  return <div>{/* {icons()} */}</div>;
 }
