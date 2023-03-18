@@ -19,6 +19,7 @@ export default function Web() {
   const [startPos, setStartPos] = useState<{ x: number; y: number } | null>(null);
   const apps = DesktopContext.useSelector((state) => state.context.apps);
   const folders = DesktopContext.useSelector((state) => state.context.folders);
+  const footers = DesktopContext.useSelector((state) => state.context.footers);
   const contextMenu = DesktopContext.useSelector((state) => state.context.contextMenu);
   const [state, send] = DesktopContext.useActor();
 
@@ -145,7 +146,12 @@ export default function Web() {
           menus={contextMenu.menus}
           handleCloseMenu={() => send({ type: "contextMenu.clear" })}
         />
-        <DesktopFooter />
+        <DesktopFooter
+          footers={footers}
+          handleActive={(target: string, index: number) => {
+            send({ type: "footer.actived", target, index });
+          }}
+        />
         <Image
           src="/bg.jpeg"
           alt="background"

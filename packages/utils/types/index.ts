@@ -129,3 +129,8 @@ export type getDistanceProps = {
   size: { width: number; height: number };
   pos: { x: number; y: number };
 };
+
+export type DesktopFooterProps = {
+  footers: FooterType[];
+  handleActive: Function;
+};

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { footerMenus } from "../config/footer-menus";
+import { useEffect, useRef, useState } from "react";
+import { DesktopFooterProps, FooterType } from "utils/types";
 
 const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
   width: 100%;
@@ -39,12 +40,16 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
     text-align: center;
     width: 40px;
 
-    .app-icon {
+    &.jump {
+      animation: jumping 1s cubic-bezier(0.35, 0.15, 0.25, 0.95) 2;
+    }
+
+    .footer-icon {
       width: 100%;
       height: 100%;
     }
 
-    .app-title {
+    .footer-title {
       position: absolute;
       top: -3rem;
       width: max-content;
@@ -74,7 +79,7 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
     }
 
     :hover {
-      > div.app-title {
+      > div.footer-title {
         display: block;
       }
     }
@@ -92,25 +97,65 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
       }
     }
   }
+
+  @keyframes jumping {
+    0% {
+      transform: translateY(0%);
+    }
+    50% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0%);
+    }
+  }
 `;
 
-export function DesktopFooter() {
+export function DesktopFooter({ footers, handleActive }: DesktopFooterProps) {
+  const [animateIcons, setAnimateIcons] = useState<FooterType[]>([]);
+
+  const timerId = useRef<NodeJS.Timeout | null>(null);
+  const handleClick = (footer: FooterType, index: number) => {
+    setAnimateIcons((prev) => {
+      const prevArrayTitle = prev.map((footer) => footer.title);
+      if (prevArrayTitle.includes(footer.title)) return [...prev];
+      return [...prev, footer];
+    });
+
+    timerId.current = setTimeout(() => {
+      handleActive(footer.title, index);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerId.current !== null) {
+        clearTimeout(timerId.current);
+      }
+    };
+  }, []);
+
   return (
     <FooterLayout>
       <div className="footer-container belong-footer">
-        {footerMenus.map((app, index) => {
+        {footers.map((footer, index) => {
           return (
             <div
               key={index}
-              className={`footer-item belong-footer ${app.isActived ? "actived" : ""}`}
+              className={`footer-item belong-footer ${footer.isActived ? "actived" : ""} ${
+                animateIcons.map((item) => item.title).includes(footer.title) ? "jump" : ""
+              }`}
+              onClick={() => {
+                !footer.isActived ? handleClick(footer, index) : () => {};
+              }}
             >
-              <div className="app-title ">{app.title}</div>
-              <div className="app-icon">
+              <div className="footer-title ">{footer.title}</div>
+              <div className="footer-icon">
                 <Image
                   className="belong-footer"
                   fill={true}
-                  src={app.icon}
-                  alt={`${app.title}-icon`}
+                  src={footer.icon}
+                  alt={`${footer.title}-icon`}
                 />
               </div>
             </div>
@@ -119,8 +164,4 @@ export function DesktopFooter() {
       </div>
     </FooterLayout>
   );
-}
-
-function FooterIcon() {
-  return <div>{/* {icons()} */}</div>;
 }
