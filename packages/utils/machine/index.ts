@@ -1,18 +1,21 @@
-import { createMachine, assign } from "xstate";
-import { AppProps, MenuItemType, MenuProps, Pos, FolderProps } from "../types";
+import { createMachine, assign, TransitionsConfig, DelayedTransitionDefinition } from "xstate";
+import { AppProps, MenuItemType, MenuProps, Pos, FolderProps, FooterType } from "../types";
 import { desktopApps } from "./desktop-apps";
 import { desktopFolders } from "./desktop-folders";
+import { desktopFooters } from "./desktop-footers";
 
 export const desktopMachine = createMachine(
   {
     tsTypes: {} as import("./index.typegen").Typegen0,
     predictableActionArguments: true,
+    preserveActionOrder: true,
     schema: {
       context: {} as {
         apps: AppProps[];
         currentMovement: Pos;
         contextMenu: MenuProps;
         folders: FolderProps[];
+        footers: FooterType[];
       },
       events: {} as
         | { type: "app.focus"; target?: string }
@@ -22,7 +25,8 @@ export const desktopMachine = createMachine(
         | { type: "app.moving"; tempX: number; tempY: number }
         | { type: "app.placed"; dX: number; dY: number }
         | { type: "contextMenu.setting"; pos: Pos; menus: MenuItemType[] }
-        | { type: "contextMenu.clear" },
+        | { type: "contextMenu.clear" }
+        | { type: "footer.actived"; target: string; index: number },
     },
     id: "desktop",
     initial: "idle",
@@ -35,6 +39,7 @@ export const desktopMachine = createMachine(
         menus: [],
       },
       folders: desktopFolders,
+      footers: desktopFooters,
     },
     states: {
       idle: {
@@ -70,6 +75,10 @@ export const desktopMachine = createMachine(
           "contextMenu.clear": {
             target: "idle",
             actions: ["clearContextMenu"],
+          },
+          "footer.actived": {
+            target: "idle",
+            actions: ["setFooterActive"],
           },
         },
       },
@@ -148,6 +157,20 @@ export const desktopMachine = createMachine(
         return {
           ...context,
           contextMenu: { open: false, pos: null, menus: [] },
+        };
+      }),
+      setFooterActive: assign((context, event) => {
+        const { target, index } = event;
+
+        const targetFooter = context.footers
+          .filter((footer) => footer.title === target)
+          .map((footer) => ({ ...footer, isActived: true }));
+
+        const restApps = context.footers.filter((footer) => footer.title !== target);
+
+        return {
+          ...context,
+          footers: [...restApps.slice(0, index), ...targetFooter, ...restApps.slice(index)],
         };
       }),
     },

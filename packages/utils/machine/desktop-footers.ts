@@ -1,6 +1,6 @@
 import { FooterType } from "utils/types";
 
-export const footerMenus: FooterType[] = [
+export const desktopFooters: FooterType[] = [
   {
     title: "Finder",
     icon: "/finder.svg",
@@ -23,7 +23,7 @@ export const footerMenus: FooterType[] = [
     title: "Firefox",
     icon: "/firefox.svg",
     menus: [],
-    isActived: true,
+    isActived: false,
   },
   {
     title: "Chrome",
@@ -31,12 +31,12 @@ export const footerMenus: FooterType[] = [
     menus: [],
     isActived: false,
   },
-  { title: "Slack", icon: "/slack.svg", menus: [], isActived: true },
+  { title: "Slack", icon: "/slack.svg", menus: [], isActived: false },
   {
     title: "YouTube",
     icon: "/youtube.svg",
     menus: [],
-    isActived: true,
+    isActived: false,
   },
   {
     title: "Linkedin",
