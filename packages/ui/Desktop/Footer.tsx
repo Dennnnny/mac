@@ -116,7 +116,11 @@ export function DesktopFooter({ footers, handleActive }: DesktopFooterProps) {
 
   const timerId = useRef<NodeJS.Timeout | null>(null);
   const handleClick = (footer: FooterType, index: number) => {
-    setAnimateIcons((prev) => [...new Set([...prev, footer])]);
+    setAnimateIcons((prev) => {
+      const prevArrayTitle = prev.map((footer) => footer.title);
+      if (prevArrayTitle.includes(footer.title)) return [...prev];
+      return [...prev, footer];
+    });
 
     timerId.current = setTimeout(() => {
       handleActive(footer.title, index);
