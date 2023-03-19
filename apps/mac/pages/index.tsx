@@ -147,6 +147,7 @@ export default function Web() {
           handleCloseMenu={() => send({ type: "contextMenu.clear" })}
         />
         <DesktopFooter
+          isEnabled={!contextMenu.open}
           footers={footers}
           handleActive={(target: string, index: number) => {
             send({ type: "footer.actived", target, index });

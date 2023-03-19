@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { DesktopFooterProps, FooterType } from "utils/types";
 
-const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
+const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })<{ isEnabled: boolean }>`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -11,12 +11,17 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
   bottom: -3.95rem;
   transition: bottom 0.2s linear;
 
-  :hover {
-    bottom: 0;
-    > .footer-container {
-      border-color: #44505e;
-    }
-  }
+  ${({ isEnabled }) =>
+    isEnabled
+      ? `
+        :hover {
+          bottom: 0;
+          > .footer-container {
+            border-color: #44505e;
+          }
+        };
+      `
+      : ""};
 
   div.footer-container {
     bottom: -3.9rem;
@@ -111,7 +116,7 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })`
   }
 `;
 
-export function DesktopFooter({ footers, handleActive }: DesktopFooterProps) {
+export function DesktopFooter({ footers, handleActive, isEnabled }: DesktopFooterProps) {
   const [animateIcons, setAnimateIcons] = useState<FooterType[]>([]);
 
   const timerId = useRef<NodeJS.Timeout | null>(null);
@@ -136,7 +141,7 @@ export function DesktopFooter({ footers, handleActive }: DesktopFooterProps) {
   }, []);
 
   return (
-    <FooterLayout>
+    <FooterLayout isEnabled={isEnabled}>
       <div className="footer-container belong-footer">
         {footers.map((footer, index) => {
           return (

@@ -133,4 +133,5 @@ export type getDistanceProps = {
 export type DesktopFooterProps = {
   footers: FooterType[];
   handleActive: Function;
+  isEnabled: boolean;
 };
