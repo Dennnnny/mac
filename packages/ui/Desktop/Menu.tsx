@@ -64,6 +64,15 @@ const MenuLayout = styled.div.withConfig({
       color: #7f7f7f;
     }
   }
+
+  .menu-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(123, 234, 22, 0.5);
+  }
 `;
 
 type nestedMenuType = {
@@ -161,8 +170,37 @@ export function Menu({
         ))}
       </MenuLayout>
       {nestedMenu && (
-        <Menu open={nestedMenu!.open} pos={nestedMenu!.pos} menus={nestedMenu!.menus ?? []} />
+        <Menu
+          type={type}
+          open={nestedMenu!.open}
+          pos={nestedMenu!.pos}
+          menus={nestedMenu!.menus ?? []}
+        />
       )}
+      <MenuOverlay
+        type={type}
+        open={open}
+        onClick={() => {
+          handleCloseMenu();
+        }}
+        onContextMenu={() => {
+          handleCloseMenu();
+        }}
+      />
     </>
   ) : null;
 }
+
+const MenuOverlay = styled.div.withConfig({ componentId: "MenuOverlay" })<{
+  open: boolean;
+  type: string;
+}>`
+  display: ${({ open }) => (open ? "block" : "none")};
+  position: absolute;
+  width: 200vw;
+  height: 200vh;
+  transform: translate(-50%, -50%);
+  /* background-color: rgba(122, 233, 211, 0.3); */
+  z-index: 20;
+  top: ${({ type }) => (type === "header" ? "calc(100% + 24px)" : 0)};
+`;
