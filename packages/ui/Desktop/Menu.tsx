@@ -5,7 +5,7 @@ import { desktopMenu } from "../config/desktop-menus";
 
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;
-  type?: "default" | "header";
+  type?: "default" | "header" | "footer";
   open?: boolean;
 };
 
@@ -14,6 +14,8 @@ const MenuLayout = styled.div.withConfig({
 })<MenuLayoutProps>`
   /* visibility: ${({ open }) => (open ? "visible" : "hidden")}; */
   opacity: ${({ open }) => (open ? 1 : 0)};
+  z-index: ${({ open }) => (open ? 21 : 0)};
+  pointer-events: ${({ open }) => (open ? "initial" : "none")};
   color: #fff;
   user-select: none;
   background-color: #263245;
@@ -51,12 +53,19 @@ const MenuLayout = styled.div.withConfig({
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 2rem;
+
+      > p {
+        width: 100%;
+      }
 
       > span {
         display: flex;
         padding-right: 0.4rem;
-        pointer-events: none;
+        flex-shrink: 1;
+        padding-left: 1.5rem;
+        > * {
+          pointer-events: none;
+        }
       }
     }
 
@@ -100,7 +109,7 @@ export function Menu({
     setNestedMenu((prev) => ({
       ...prev,
       open: true,
-      pos: { x: x + width, y: y - 3.5 },
+      pos: type === "footer" ? { x: pos!.x + width + 18, y: 0 } : { x: x + width, y: y - 3.5 },
       menus,
     }));
   };

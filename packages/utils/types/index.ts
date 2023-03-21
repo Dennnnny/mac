@@ -58,7 +58,7 @@ export type MenuProps = {
   open: boolean;
   menus?: MenuItemType[];
   pos: { x: number; y: number } | null;
-  type?: "default" | "header";
+  type?: "default" | "header" | "footer";
   handleCloseMenu?: Function;
 };
 
