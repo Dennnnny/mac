@@ -1,43 +1,5 @@
 import styled from "styled-components";
-import { AppProps, SelectRectProps, AppLayoutProps } from "../utils/types";
-import { getRect } from "utils/tool";
-
-export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
-  if (!startPos) return null;
-
-  const { x, y, w, h } = getRect({ start: startPos, end: mouse });
-
-  return (
-    <div
-      className="desktop"
-      style={{
-        transform: `translate(${x}px,${y}px)`,
-        width: w,
-        height: h,
-        position: "absolute",
-        border: `1px solid gray`,
-        background: `rgba(255,255,255,0.2)`,
-      }}
-    />
-  );
-};
-
-export const DesktopContainer = styled.div.withConfig({
-  componentId: "DesktopContainer",
-})`
-  font-family: Tahoma, "Noto Sans", sans-serif;
-  height: 100vh;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  *:not(input):not(textarea) {
-    user-select: none;
-  }
-  z-index: 10;
-`;
+import { AppProps, AppLayoutProps } from "utils/types";
 
 const AppLayout = styled.div.withConfig({
   componentId: "AppLayout",
@@ -128,12 +90,3 @@ export const DesktopApp = (props: AppProps) => {
     </AppLayout>
   );
 };
-
-type HeaderProps = {
-  activeApp?: string;
-  structure?: {}; // maybe will change but first do the same
-  status?: {}; // smae studd
-};
-export const DesktopHeader = (props: HeaderProps) => {};
-
-export const DesktopFooter = () => {};

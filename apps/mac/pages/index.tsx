@@ -1,12 +1,16 @@
 import { useRef, useState, MouseEvent, useEffect, useMemo, useCallback } from "react";
 import { checkRectCollision, getRect, handleClickApps, useMouse } from "utils/tool";
-import { SelectRect, DesktopContainer, DesktopApp } from "ui";
-import { Menu } from "ui/Desktop/Menu";
 import { desktopMenu } from "ui/config/desktop-menus";
 import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
-import { DesktopHeader } from "ui/Desktop/Header";
-import { DesktopFooter } from "ui/Desktop/Footer";
+import {
+  DesktopHeader,
+  DesktopFooter,
+  Menu,
+  SelectRect,
+  DesktopContainer,
+  DesktopApp,
+} from "ui/Desktop";
 import { RootContainer } from "ui/Container/RootContainer";
 import Image from "next/image";
 import Head from "next/head";
