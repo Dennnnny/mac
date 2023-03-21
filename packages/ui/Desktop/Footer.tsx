@@ -191,7 +191,7 @@ export function DesktopFooter({ footers, handleActive, isEnabled }: DesktopFoote
         <Menu
           menus={footerMenuOpen?.menus}
           open={isFooterMenuExist}
-          pos={{ x: (footerMenuOpen?.index ?? 0) * 42, y: 0 }}
+          pos={{ x: (footerMenuOpen?.index ?? 0) * 48, y: 0 }}
           handleCloseMenu={() => {
             setFooterMenuOpen(null);
           }}
