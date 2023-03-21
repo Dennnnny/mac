@@ -47,12 +47,14 @@ export default function Web() {
     (event: Event) => {
       event.preventDefault();
       const target = event.target as Element;
-      if (target?.matches(".HeaderLayout") || target?.matches(".belong-footer")) return;
-      send({
-        type: "contextMenu.setting",
-        pos: mousePos,
-        menus: desktopMenu,
-      });
+
+      if (target.matches(".desktop")) {
+        send({
+          type: "contextMenu.setting",
+          pos: mousePos,
+          menus: desktopMenu,
+        });
+      }
     },
     [mousePos, send]
   );

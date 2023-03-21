@@ -9,6 +9,7 @@ export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
 
   return (
     <div
+      className="desktop"
       style={{
         transform: `translate(${x}px,${y}px)`,
         width: w,
