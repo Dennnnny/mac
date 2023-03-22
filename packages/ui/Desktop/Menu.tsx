@@ -5,7 +5,7 @@ import { desktopMenu } from "../config/desktop-menus";
 
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;
-  type?: "default" | "header" | "footer";
+  type?: "default" | "header" | "footer" | "app";
   open?: boolean;
 };
 
@@ -14,7 +14,7 @@ const MenuLayout = styled.div.withConfig({
 })<MenuLayoutProps>`
   /* visibility: ${({ open }) => (open ? "visible" : "hidden")}; */
   opacity: ${({ open }) => (open ? 1 : 0)};
-  z-index: ${({ open }) => (open ? 21 : 0)};
+  z-index: ${({ open }) => (open ? 22 : 0)};
   pointer-events: ${({ open }) => (open ? "initial" : "none")};
   color: #fff;
   user-select: none;
@@ -200,15 +200,14 @@ export function Menu({
   ) : null;
 }
 
-const MenuOverlay = styled.div.withConfig({ componentId: "MenuOverlay" })<{
-  open: boolean;
-  type: string;
-}>`
+type OverlayProps = Omit<MenuLayoutProps, "pos">;
+
+const MenuOverlay = styled.div.withConfig({ componentId: "MenuOverlay" })<OverlayProps>`
   display: ${({ open }) => (open ? "block" : "none")};
   position: absolute;
   width: 200vw;
   height: 200vh;
-  transform: translate(-50%, -50%);
+  transform: ${({ type }) => (type === "app" ? "translate(0%, -50%)" : "translate(-50%, -50%)")};
   /* background-color: rgba(122, 233, 211, 0.3); */
   z-index: 20;
   top: ${({ type }) => (type === "header" ? "calc(100% + 24px)" : 0)};

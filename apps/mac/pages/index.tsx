@@ -115,25 +115,6 @@ export default function Web() {
       </Head>
       <DesktopContainer ref={ref} onMouseUp={onMouseUpDesktop} onMouseDown={onMouseDownDesktop}>
         <SelectRect startPos={startPos} mouse={mousePos} />
-        {apps.map((app, index) => {
-          return (
-            <DesktopApp
-              name={app.name}
-              key={`${app.name}-${index}`}
-              icon={app.icon}
-              posX={app.posX}
-              posY={app.posY}
-              isActived={app.isActived}
-              handleDragging={handleDragging(app)}
-              handleAppStatus={() => {
-                if (!app.isActived) {
-                  send({ type: "app.singleAppFocus", target: app.name });
-                }
-              }}
-              handleDbClick={() => handleClickApps(app)}
-            />
-          );
-        })}
         {folders.map((folder, index) => {
           return (
             <RootContainer
@@ -143,6 +124,27 @@ export default function Web() {
             >
               <>DEMO FOLDER</>
             </RootContainer>
+          );
+        })}
+        {apps.map((app, index) => {
+          return (
+            <DesktopApp
+              name={app.name}
+              key={`${app.name}-${index}`}
+              icon={app.icon}
+              posX={app.posX}
+              posY={app.posY}
+              isActived={app.isActived}
+              menus={app.menus}
+              mousePos={mousePos}
+              handleDragging={handleDragging(app)}
+              handleAppStatus={() => {
+                if (!app.isActived) {
+                  send({ type: "app.singleAppFocus", target: app.name });
+                }
+              }}
+              handleDbClick={() => handleClickApps(app)}
+            />
           );
         })}
         <DesktopHeader />
