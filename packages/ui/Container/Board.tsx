@@ -70,21 +70,22 @@ export default function Border({ type, size, pos, handleDragging }: ResizeCompon
           const [distanceX, distanceY] = getDistance({ e, type, size, pos });
           const isTypeHorizontal = type === "left" || type === "right";
 
-          if (
-            pos.y + size.height > window.innerHeight * 0.995 ||
-            pos.x + size.width > window.innerWidth
-          ) {
-            console.log("trigger");
-            handleDragging!(type, isTypeHorizontal ? [-3, 0] : [0, -3]);
-            setPress(false);
-            return;
-          }
+          // if (
+          //   pos.y + size.height > window.innerHeight * 0.995 ||
+          //   pos.x + size.width > window.innerWidth
+          // ) {
+          //   console.log("1", pos.x, size.width, window.innerWidth);
+          //   handleDragging!(type, isTypeHorizontal ? [-3, 0] : [0, -3]);
+          //   setPress(false);
+          //   return;
+          // }
 
-          if (pos.y < 24 || pos.x + distanceX <= 0) {
-            handleDragging!(type, isTypeHorizontal ? [-3, 0] : [0, -3]);
-            setPress(false);
-            return;
-          }
+          // if (pos.y < 24 || pos.x + distanceX <= 0) {
+          // console.log("2");
+          //   handleDragging!(type, isTypeHorizontal ? [-3, 0] : [0, -3]);
+          //   setPress(false);
+          //   return;
+          // }
 
           // each direction can use this one to detect inset distance less than 100
           if (size.height + distanceY < maxLength || size.width + distanceX < maxLength) {

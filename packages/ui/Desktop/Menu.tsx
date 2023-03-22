@@ -5,7 +5,7 @@ import { desktopMenu } from "../config/desktop-menus";
 
 type MenuLayoutProps = {
   pos?: { x: number; y: number } | null;
-  type?: "default" | "header";
+  type?: "default" | "header" | "footer" | "app";
   open?: boolean;
 };
 
@@ -14,6 +14,8 @@ const MenuLayout = styled.div.withConfig({
 })<MenuLayoutProps>`
   /* visibility: ${({ open }) => (open ? "visible" : "hidden")}; */
   opacity: ${({ open }) => (open ? 1 : 0)};
+  z-index: ${({ open }) => (open ? 22 : 0)};
+  pointer-events: ${({ open }) => (open ? "initial" : "none")};
   color: #fff;
   user-select: none;
   background-color: #263245;
@@ -51,18 +53,34 @@ const MenuLayout = styled.div.withConfig({
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 2rem;
+
+      > p {
+        width: 100%;
+      }
 
       > span {
         display: flex;
         padding-right: 0.4rem;
-        pointer-events: none;
+        flex-shrink: 1;
+        padding-left: 1.5rem;
+        > * {
+          pointer-events: none;
+        }
       }
     }
 
     > div.disabled {
       color: #7f7f7f;
     }
+  }
+
+  .menu-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(123, 234, 22, 0.5);
   }
 `;
 
@@ -91,7 +109,7 @@ export function Menu({
     setNestedMenu((prev) => ({
       ...prev,
       open: true,
-      pos: { x: x + width, y: y - 3.5 },
+      pos: type === "footer" ? { x: pos!.x + width + 18, y: 0 } : { x: x + width, y: y - 3.5 },
       menus,
     }));
   };
@@ -161,8 +179,36 @@ export function Menu({
         ))}
       </MenuLayout>
       {nestedMenu && (
-        <Menu open={nestedMenu!.open} pos={nestedMenu!.pos} menus={nestedMenu!.menus ?? []} />
+        <Menu
+          type={type}
+          open={nestedMenu!.open}
+          pos={nestedMenu!.pos}
+          menus={nestedMenu!.menus ?? []}
+        />
       )}
+      <MenuOverlay
+        type={type}
+        open={open}
+        onClick={() => {
+          handleCloseMenu();
+        }}
+        onContextMenu={() => {
+          handleCloseMenu();
+        }}
+      />
     </>
   ) : null;
 }
+
+type OverlayProps = Omit<MenuLayoutProps, "pos">;
+
+const MenuOverlay = styled.div.withConfig({ componentId: "MenuOverlay" })<OverlayProps>`
+  display: ${({ open }) => (open ? "block" : "none")};
+  position: absolute;
+  width: 200vw;
+  height: 200vh;
+  transform: ${({ type }) => (type === "app" ? "translate(0%, -50%)" : "translate(-50%, -50%)")};
+  /* background-color: rgba(122, 233, 211, 0.3); */
+  z-index: 20;
+  top: ${({ type }) => (type === "header" ? "calc(100% + 24px)" : 0)};
+`;

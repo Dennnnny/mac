@@ -31,6 +31,7 @@ export type AppProps = {
   isActived?: boolean;
   action?: string | Function;
   menus?: MenuItemType[];
+  mousePos?: Pos;
   // handleDragging?: (e: MouseEvent<HTMLElement>) => void;
   handleDragging?: ((e: MouseEvent<HTMLElement>) => void) | undefined;
   handleAppStatus?: () => void;
@@ -58,7 +59,7 @@ export type MenuProps = {
   open: boolean;
   menus?: MenuItemType[];
   pos: { x: number; y: number } | null;
-  type?: "default" | "header";
+  type?: "default" | "header" | "footer" | "app";
   handleCloseMenu?: Function;
 };
 
@@ -133,4 +134,5 @@ export type getDistanceProps = {
 export type DesktopFooterProps = {
   footers: FooterType[];
   handleActive: Function;
+  isEnabled: boolean;
 };

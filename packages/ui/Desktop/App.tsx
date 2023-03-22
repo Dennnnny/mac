@@ -1,42 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { AppProps, SelectRectProps, AppLayoutProps } from "../utils/types";
-import { getRect } from "utils/tool";
-
-export const SelectRect = ({ startPos, mouse }: SelectRectProps) => {
-  if (!startPos) return null;
-
-  const { x, y, w, h } = getRect({ start: startPos, end: mouse });
-
-  return (
-    <div
-      style={{
-        transform: `translate(${x}px,${y}px)`,
-        width: w,
-        height: h,
-        position: "absolute",
-        border: `1px solid gray`,
-        background: `rgba(255,255,255,0.2)`,
-      }}
-    />
-  );
-};
-
-export const DesktopContainer = styled.div.withConfig({
-  componentId: "DesktopContainer",
-})`
-  font-family: Tahoma, "Noto Sans", sans-serif;
-  height: 100vh;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  *:not(input):not(textarea) {
-    user-select: none;
-  }
-  z-index: 10;
-`;
+import { AppProps, AppLayoutProps } from "utils/types";
+import { Menu } from "./Menu";
 
 const AppLayout = styled.div.withConfig({
   componentId: "AppLayout",
@@ -96,6 +61,10 @@ const AppLayout = styled.div.withConfig({
         border-radius: 0.5rem;
       `};
   }
+
+  > :is(.belong-menu) {
+    width: max-content;
+  }
 `;
 
 export const DesktopApp = (props: AppProps) => {
@@ -107,12 +76,16 @@ export const DesktopApp = (props: AppProps) => {
     handleDragging,
     handleAppStatus = () => {},
     handleDbClick = () => {},
+    menus,
+    mousePos,
     icon,
   } = props;
 
+  const [appMenu, setAppMenu] = useState({ open: false, pos: { x: 0, y: 0 } });
+
   return (
     <AppLayout
-      draggable
+      draggable={appMenu.open ? false : true}
       posX={posX}
       posY={posY}
       actived={isActived}
@@ -120,19 +93,20 @@ export const DesktopApp = (props: AppProps) => {
       onDragStart={handleDragging}
       onDragEnd={handleDragging}
       onDoubleClick={handleDbClick}
+      onContextMenu={() => {
+        setAppMenu({ open: true, pos: mousePos! });
+      }}
       className="apps"
     >
       {icon != null ? icon : <div className="icon dashed" />}
       <div className="name">{name}</div>
+      <Menu
+        type="app"
+        open={appMenu.open}
+        menus={menus}
+        pos={{ x: appMenu.pos!.x - posX + 40, y: appMenu.pos!.y - posY + 55 }}
+        handleCloseMenu={() => setAppMenu({ open: false, pos: { x: 0, y: 0 } })}
+      />
     </AppLayout>
   );
 };
-
-type HeaderProps = {
-  activeApp?: string;
-  structure?: {}; // maybe will change but first do the same
-  status?: {}; // smae studd
-};
-export const DesktopHeader = (props: HeaderProps) => {};
-
-export const DesktopFooter = () => {};

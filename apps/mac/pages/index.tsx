@@ -1,12 +1,16 @@
 import { useRef, useState, MouseEvent, useEffect, useMemo, useCallback } from "react";
 import { checkRectCollision, getRect, handleClickApps, useMouse } from "utils/tool";
-import { SelectRect, DesktopContainer, DesktopApp } from "ui";
-import { Menu } from "ui/Desktop/Menu";
 import { desktopMenu } from "ui/config/desktop-menus";
 import { DesktopContext } from "./_app";
 import { AppProps } from "utils/types";
-import { DesktopHeader } from "ui/Desktop/Header";
-import { DesktopFooter } from "ui/Desktop/Footer";
+import {
+  DesktopHeader,
+  DesktopFooter,
+  Menu,
+  SelectRect,
+  DesktopContainer,
+  DesktopApp,
+} from "ui/Desktop";
 import { RootContainer } from "ui/Container/RootContainer";
 import Image from "next/image";
 import Head from "next/head";
@@ -47,12 +51,14 @@ export default function Web() {
     (event: Event) => {
       event.preventDefault();
       const target = event.target as Element;
-      if (target?.matches(".HeaderLayout") || target?.matches(".belong-footer")) return;
-      send({
-        type: "contextMenu.setting",
-        pos: mousePos,
-        menus: desktopMenu,
-      });
+
+      if (target.matches(".desktop")) {
+        send({
+          type: "contextMenu.setting",
+          pos: mousePos,
+          menus: desktopMenu,
+        });
+      }
     },
     [mousePos, send]
   );
@@ -109,25 +115,6 @@ export default function Web() {
       </Head>
       <DesktopContainer ref={ref} onMouseUp={onMouseUpDesktop} onMouseDown={onMouseDownDesktop}>
         <SelectRect startPos={startPos} mouse={mousePos} />
-        {apps.map((app, index) => {
-          return (
-            <DesktopApp
-              name={app.name}
-              key={`${app.name}-${index}`}
-              icon={app.icon}
-              posX={app.posX}
-              posY={app.posY}
-              isActived={app.isActived}
-              handleDragging={handleDragging(app)}
-              handleAppStatus={() => {
-                if (!app.isActived) {
-                  send({ type: "app.singleAppFocus", target: app.name });
-                }
-              }}
-              handleDbClick={() => handleClickApps(app)}
-            />
-          );
-        })}
         {folders.map((folder, index) => {
           return (
             <RootContainer
@@ -139,6 +126,27 @@ export default function Web() {
             </RootContainer>
           );
         })}
+        {apps.map((app, index) => {
+          return (
+            <DesktopApp
+              name={app.name}
+              key={`${app.name}-${index}`}
+              icon={app.icon}
+              posX={app.posX}
+              posY={app.posY}
+              isActived={app.isActived}
+              menus={app.menus}
+              mousePos={mousePos}
+              handleDragging={handleDragging(app)}
+              handleAppStatus={() => {
+                if (!app.isActived) {
+                  send({ type: "app.singleAppFocus", target: app.name });
+                }
+              }}
+              handleDbClick={() => handleClickApps(app)}
+            />
+          );
+        })}
         <DesktopHeader />
         <Menu
           open={contextMenu.open}
@@ -147,6 +155,7 @@ export default function Web() {
           handleCloseMenu={() => send({ type: "contextMenu.clear" })}
         />
         <DesktopFooter
+          isEnabled={!contextMenu.open}
           footers={footers}
           handleActive={(target: string, index: number) => {
             send({ type: "footer.actived", target, index });

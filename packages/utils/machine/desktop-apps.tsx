@@ -10,7 +10,29 @@ export const desktopApps: AppProps[] = [
     isActived: false,
     icon: <FcSearch />,
     action: () => setFullscreen(),
-    menus: [],
+    menus: [
+      {
+        打開: { type: "actions", icon: null },
+        打開檔案的應用程式: { type: "actions", icon: null },
+      },
+      { 丟到垃圾桶: { type: "actions", icon: null } },
+      {
+        取得資訊: { type: "actions", icon: null },
+        重新命名: { type: "actions", icon: null },
+        複製: { type: "actions", icon: null },
+        分享: {
+          type: "nested",
+          icon: null,
+          menus: [
+            {
+              郵件: { type: "actions", icon: null },
+              訊息: { type: "actions", icon: null },
+              AirDrop: { type: "actions", icon: null },
+            },
+          ],
+        },
+      },
+    ],
   },
   {
     name: "tester",
@@ -19,6 +41,28 @@ export const desktopApps: AppProps[] = [
     isActived: false,
     icon: <FcFile />,
     action: "tester 2.0",
-    menus: [],
+    menus: [
+      {
+        打開: { type: "actions", icon: null },
+        打開檔案的應用程式: { type: "actions", icon: null },
+      },
+      { 丟到垃圾桶: { type: "actions", icon: null } },
+      {
+        取得資訊: { type: "actions", icon: null },
+        重新命名: { type: "actions", icon: null },
+        複製: { type: "actions", icon: null },
+        分享: {
+          type: "nested",
+          icon: null,
+          menus: [
+            {
+              郵件: { type: "actions", icon: null },
+              訊息: { type: "actions", icon: null },
+              AirDrop: { type: "actions", icon: null },
+            },
+          ],
+        },
+      },
+    ],
   },
 ];

@@ -23,6 +23,7 @@ const CornerLayout = styled.div.withConfig({ componentId: "CornerLayout" })<Corn
   width: 6px;
   height: 6px;
   position: absolute;
+  z-index: 20;
 
   ${({ type, size }) => `
     transform: translate(${cornerStyles(size!.width, size!.height).translate[type]});
@@ -55,16 +56,24 @@ export default function Corner({ type, size, pos, handleDragging }: CornerProps)
         if (press) {
           const [distanceX, distanceY] = getDistance({ e, type, size, pos });
 
-          if (pos.y < 24 || pos.x + distanceX <= 0) {
-            handleDragging!(type, pos.y < 24 ? [distanceX, 0 - 3] : [-3, distanceY]);
+          if (size.height + distanceY < maxLength || size.width + distanceX < maxLength) {
+            const newDistance =
+              size.height + distanceY < maxLength && size.width + distanceX < maxLength
+                ? [0, 0]
+                : size.height + distanceY < maxLength
+                ? [distanceX, 0]
+                : [0, distanceY];
+
+            handleDragging!(type, newDistance);
             return;
           }
 
-          // // each direction can use this one to detect inset distance less than maxLength
-          if (size.height + distanceY < maxLength || size.width + distanceX < maxLength) {
-            handleDragging!(type, size.height + distanceY < 100 ? [distanceX, 0] : [0, distanceY]);
-            return;
-          }
+          // if (pos.y + distanceY < 24 || pos.x + distanceX <= 0) {
+          //   console.log("2");
+
+          //   handleDragging!(type, pos.y + distanceY < 24 ? [distanceX, 0 - 3] : [-3, distanceY]);
+          //   return;
+          // }
 
           handleDragging!(type, [distanceX, distanceY]);
         }
