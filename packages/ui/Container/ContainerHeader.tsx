@@ -42,6 +42,8 @@ const RootContainerHeaderLayout = styled.div.withConfig({
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    position: relative;
+    z-index: 10;
     :hover,
     :active {
       > .circle svg {
@@ -92,10 +94,12 @@ export default function RootContainerHeader({
   name,
   size = "sm",
   handleDragging,
+  handleEnlargeMaximumSize,
 }: {
   name: string;
   size?: string;
   handleDragging: Function;
+  handleEnlargeMaximumSize: Function;
 }) {
   const [press, setPress] = useState(false);
   const [tempPos, setTempPos] = useState({ x: 0, y: 0 });
@@ -107,6 +111,7 @@ export default function RootContainerHeader({
         setPress(true);
         setTempPos({ x: e.clientX, y: e.clientY });
       }}
+      onDoubleClick={() => handleEnlargeMaximumSize()}
     >
       <div
         className="header-area"
@@ -131,7 +136,13 @@ export default function RootContainerHeader({
         <div className="circle yellow">
           <AiOutlineMinus />
         </div>
-        <div className="circle green">
+        <div
+          className="circle green"
+          onClick={() => {
+            handleEnlargeMaximumSize();
+            setPress(false);
+          }}
+        >
           <TiArrowUnsorted />
         </div>
       </div>

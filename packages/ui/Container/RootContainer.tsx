@@ -21,6 +21,7 @@ const RootContainerLayout = styled.div.withConfig({
   border: 1px solid #636465;
   border-radius: 0.25rem;
   box-shadow: 0px 0px 15px #080e19;
+  z-index: 21;
 
   > .body {
     height: calc(100% - 24px);
@@ -49,6 +50,13 @@ export function RootContainer(props: RootContainerProps) {
     setResize({ pos: newPos, size: newSize });
   }
 
+  function handleEnlargeMaximumSize() {
+    setResize({
+      pos: { x: 1, y: 25 },
+      size: { width: window.innerWidth - 1, height: window.innerHeight - 25 },
+    });
+  }
+
   return (
     <RootContainerLayout size={size} pos={pos} maxLength={maxLength}>
       <Border pos={pos} type="top" size={size} handleDragging={handleDragging} />
@@ -59,7 +67,11 @@ export function RootContainer(props: RootContainerProps) {
       <Corner pos={pos} type="right-top" size={size} handleDragging={handleDragging} />
       <Corner pos={pos} type="left-bottom" size={size} handleDragging={handleDragging} />
       <Corner pos={pos} type="right-bottom" size={size} handleDragging={handleDragging} />
-      <RootContainerHeader name="文件夾" handleDragging={handleDragging} />
+      <RootContainerHeader
+        name="文件夾"
+        handleDragging={handleDragging}
+        handleEnlargeMaximumSize={handleEnlargeMaximumSize}
+      />
       <div className="body">{children}</div>
     </RootContainerLayout>
   );
