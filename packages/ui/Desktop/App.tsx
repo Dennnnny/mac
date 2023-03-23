@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { AppProps, AppLayoutProps } from "utils/types";
 import { Menu } from "./Menu";
@@ -94,7 +94,9 @@ export const DesktopApp = (props: AppProps) => {
       onDragEnd={handleDragging}
       onDoubleClick={handleDbClick}
       onContextMenu={() => {
-        setAppMenu({ open: true, pos: mousePos! });
+        if (!appMenu.open) {
+          setAppMenu({ open: true, pos: mousePos! });
+        }
       }}
       className="apps"
     >
