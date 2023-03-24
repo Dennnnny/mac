@@ -10,8 +10,8 @@ import {
   SelectRect,
   DesktopContainer,
   DesktopApp,
+  Folder,
 } from "ui/Desktop";
-import { RootContainer } from "ui/Container/RootContainer";
 import Image from "next/image";
 import Head from "next/head";
 
@@ -117,13 +117,13 @@ export default function Web() {
         <SelectRect startPos={startPos} mouse={mousePos} />
         {folders.map((folder, index) => {
           return (
-            <RootContainer
-              key={`folder-${index}`}
-              defaultPos={folder.pos}
-              defaultSize={folder.size}
-            >
-              <>DEMO FOLDER</>
-            </RootContainer>
+            <Folder
+              key={index}
+              folder={folder}
+              handleFolderAction={(v: string) => {
+                console.log("handle this", v, ",id:", folder.id);
+              }}
+            />
           );
         })}
         {apps.map((app, index) => {

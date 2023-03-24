@@ -91,7 +91,7 @@ export type RootContainerProps = {
   children: JSX.Element;
   defaultSize: { width: number; height: number };
   defaultPos: { x: number; y: number };
-  // handleResize: Function;
+  handleFolderAction?: Function;
 };
 
 export type RootContainerLayoutProps = {

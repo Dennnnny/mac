@@ -40,7 +40,7 @@ const RootContainerLayout = styled.div.withConfig({
 `;
 
 export function RootContainer(props: RootContainerProps) {
-  const { defaultSize, defaultPos, children } = props;
+  const { defaultSize, defaultPos, children, handleFolderAction } = props;
 
   const [resizeConfig, setResize] = useState({ pos: defaultPos, size: defaultSize });
   const { pos, size } = resizeConfig;
@@ -58,7 +58,14 @@ export function RootContainer(props: RootContainerProps) {
   }
 
   return (
-    <RootContainerLayout size={size} pos={pos} maxLength={maxLength}>
+    <RootContainerLayout
+      size={size}
+      pos={pos}
+      maxLength={maxLength}
+      onMouseDown={() => {
+        handleFolderAction && handleFolderAction!("folder.focus");
+      }}
+    >
       <Border pos={pos} type="top" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="right" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="bottom" size={size} handleDragging={handleDragging} />
@@ -71,6 +78,7 @@ export function RootContainer(props: RootContainerProps) {
         name="文件夾"
         handleDragging={handleDragging}
         handleEnlargeMaximumSize={handleEnlargeMaximumSize}
+        handleFolderAction={handleFolderAction}
       />
       <div className="body">{children}</div>
     </RootContainerLayout>
