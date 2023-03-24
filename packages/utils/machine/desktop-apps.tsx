@@ -35,12 +35,13 @@ export const desktopApps: AppProps[] = [
     ],
   },
   {
-    name: "tester",
+    name: "DEMO",
     posX: 200,
     posY: 50,
     isActived: false,
     icon: <FcFile />,
-    action: "tester 2.0",
+    action: "open",
+    target: "DEMO",
     menus: [
       {
         打開: { type: "actions", icon: null },

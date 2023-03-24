@@ -143,7 +143,10 @@ export default function Web() {
                   send({ type: "app.singleAppFocus", target: app.name });
                 }
               }}
-              handleDbClick={() => handleClickApps(app)}
+              handleDbClick={() => {
+                send({ type: "folder.open", target: app.target! });
+                handleClickApps(app);
+              }}
             />
           );
         })}

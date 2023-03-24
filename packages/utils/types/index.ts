@@ -32,6 +32,7 @@ export type AppProps = {
   action?: string | Function;
   menus?: MenuItemType[];
   mousePos?: Pos;
+  target?: string;
   // handleDragging?: (e: MouseEvent<HTMLElement>) => void;
   handleDragging?: ((e: MouseEvent<HTMLElement>) => void) | undefined;
   handleAppStatus?: () => void;
@@ -80,6 +81,7 @@ export type DesktopHeaderType = {
 export type FolderProps = {
   size: { width: number; height: number };
   pos: { x: number; y: number };
+  [key: string]: string | number | Pos | SizeProp | boolean | [];
 };
 
 export type SizeProp = { width: number; height: number };
