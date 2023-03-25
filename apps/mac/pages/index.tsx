@@ -118,10 +118,12 @@ export default function Web() {
         {folders.map((folder, index) => {
           return (
             <Folder
-              key={index}
+              key={`${folder.name}-${folder.id}`}
               folder={folder}
               handleFolderAction={(v: string) => {
-                console.log("handle this", v, ",id:", folder.id);
+                const actiontype = v as "folder.focus" | "folder.close";
+                const folderOrder = folder.order as number;
+                send({ type: actiontype, index, order: folderOrder });
               }}
             />
           );

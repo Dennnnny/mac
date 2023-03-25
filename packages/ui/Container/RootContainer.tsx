@@ -21,7 +21,7 @@ const RootContainerLayout = styled.div.withConfig({
   border: 1px solid #636465;
   border-radius: 0.25rem;
   box-shadow: 0px 0px 15px #080e19;
-  z-index: 21;
+  z-index: ${({ order }) => (order ? 21 - order! : 21)};
 
   > .body {
     height: calc(100% - 24px);
@@ -40,7 +40,7 @@ const RootContainerLayout = styled.div.withConfig({
 `;
 
 export function RootContainer(props: RootContainerProps) {
-  const { defaultSize, defaultPos, children, handleFolderAction } = props;
+  const { defaultSize, defaultPos, children, handleFolderAction, order } = props;
 
   const [resizeConfig, setResize] = useState({ pos: defaultPos, size: defaultSize });
   const { pos, size } = resizeConfig;
@@ -59,6 +59,7 @@ export function RootContainer(props: RootContainerProps) {
 
   return (
     <RootContainerLayout
+      order={order}
       size={size}
       pos={pos}
       maxLength={maxLength}

@@ -92,12 +92,14 @@ export type RootContainerProps = {
   defaultSize: { width: number; height: number };
   defaultPos: { x: number; y: number };
   handleFolderAction?: Function;
+  order?: number;
 };
 
 export type RootContainerLayoutProps = {
   size?: { width: number; height: number };
   pos?: { x: number; y: number };
   maxLength: number;
+  order?: number;
 };
 
 export interface ResizeComponentProps {

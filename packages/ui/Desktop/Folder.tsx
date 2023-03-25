@@ -5,7 +5,6 @@ type FolderComponentProps = {
   folder: FolderProps;
   handleFolderAction?: Function;
 };
-// handleClose, handleFocus
 
 export function Folder({ folder, handleFolderAction = () => {} }: FolderComponentProps) {
   return (
@@ -13,8 +12,11 @@ export function Folder({ folder, handleFolderAction = () => {} }: FolderComponen
       defaultPos={folder.pos}
       defaultSize={folder.size}
       handleFolderAction={handleFolderAction}
+      order={folder.order as number}
     >
-      <>DEMO FOLDER</>
+      <>
+        {folder.name} FOLDER + {folder.id}
+      </>
     </RootContainer>
   );
 }

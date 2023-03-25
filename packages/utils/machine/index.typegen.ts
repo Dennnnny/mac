@@ -18,6 +18,8 @@ export interface Typegen0 {
     setContextMenu: "contextMenu.setting";
     setFocus: "app.focus" | "app.singleAppFocus";
     setFolderArray: "folder.open";
+    setFolderClose: "folder.close";
+    setFolderReorder: "folder.focus";
     setFooterActive: "footer.actived";
     setNewPosition: "app.placed";
     setTempPosition: "app.moving";
