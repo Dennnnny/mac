@@ -146,7 +146,9 @@ export default function Web() {
                 }
               }}
               handleDbClick={() => {
-                send({ type: "folder.open", target: app.target! });
+                if (app.action === "open") {
+                  send({ type: "folder.open", target: app.target! });
+                }
                 handleClickApps(app);
               }}
             />
