@@ -43,6 +43,8 @@ export function RootContainer(props: RootContainerProps) {
   const { defaultSize, defaultPos, children, handleFolderAction, order } = props;
 
   const [resizeConfig, setResize] = useState({ pos: defaultPos, size: defaultSize });
+  const [isElarge, setIsEnlarge] = useState(false);
+  const [tempSizeConfig, setTempSizeCnnfig] = useState<typeof resizeConfig | null>(null);
   const { pos, size } = resizeConfig;
 
   function handleDragging(type: string, distance: number[]) {
@@ -51,10 +53,17 @@ export function RootContainer(props: RootContainerProps) {
   }
 
   function handleEnlargeMaximumSize() {
-    setResize({
-      pos: { x: 1, y: 25 },
-      size: { width: window.innerWidth - 1, height: window.innerHeight - 25 },
-    });
+    if (isElarge) {
+      setResize(tempSizeConfig!);
+      setIsEnlarge(false);
+    } else {
+      setResize({
+        pos: { x: 1, y: 25 },
+        size: { width: window.innerWidth - 1, height: window.innerHeight - 25 },
+      });
+      setTempSizeCnnfig(resizeConfig);
+      setIsEnlarge(true);
+    }
   }
 
   return (
