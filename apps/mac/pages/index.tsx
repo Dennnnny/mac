@@ -10,8 +10,8 @@ import {
   SelectRect,
   DesktopContainer,
   DesktopApp,
+  Folder,
 } from "ui/Desktop";
-import { RootContainer } from "ui/Container/RootContainer";
 import Image from "next/image";
 import Head from "next/head";
 
@@ -117,13 +117,15 @@ export default function Web() {
         <SelectRect startPos={startPos} mouse={mousePos} />
         {folders.map((folder, index) => {
           return (
-            <RootContainer
-              key={`folder-${index}`}
-              defaultPos={folder.pos}
-              defaultSize={folder.size}
-            >
-              <>DEMO FOLDER</>
-            </RootContainer>
+            <Folder
+              key={`${folder.name}-${folder.id}`}
+              folder={folder}
+              handleFolderAction={(v: string) => {
+                const actiontype = v as "folder.focus" | "folder.close";
+                const folderOrder = folder.order as number;
+                send({ type: actiontype, index, order: folderOrder });
+              }}
+            />
           );
         })}
         {apps.map((app, index) => {
@@ -143,7 +145,12 @@ export default function Web() {
                   send({ type: "app.singleAppFocus", target: app.name });
                 }
               }}
-              handleDbClick={() => handleClickApps(app)}
+              handleDbClick={() => {
+                if (app.action === "open") {
+                  send({ type: "folder.open", target: app.target! });
+                }
+                handleClickApps(app);
+              }}
             />
           );
         })}

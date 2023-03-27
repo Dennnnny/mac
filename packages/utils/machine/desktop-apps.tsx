@@ -35,16 +35,27 @@ export const desktopApps: AppProps[] = [
     ],
   },
   {
-    name: "tester",
+    name: "DEMO",
     posX: 200,
     posY: 50,
     isActived: false,
     icon: <FcFile />,
-    action: "tester 2.0",
+    action: "open",
+    target: "DEMO",
     menus: [
       {
         打開: { type: "actions", icon: null },
-        打開檔案的應用程式: { type: "actions", icon: null },
+        打開檔案的應用程式: {
+          type: "nested",
+          icon: null,
+          menus: [
+            {
+              郵件: { type: "actions", icon: null },
+              訊息: { type: "actions", icon: null },
+              AirDrop: { type: "actions", icon: null },
+            },
+          ],
+        },
       },
       { 丟到垃圾桶: { type: "actions", icon: null } },
       {

@@ -9,6 +9,34 @@ type MenuLayoutProps = {
   open?: boolean;
 };
 
+const nestedMenuY = (type: string) => {
+  switch (type) {
+    case "footer":
+      return "-100%";
+    case "app":
+    case "header":
+    default:
+      return "calc(0% - 0.25rem)";
+  }
+};
+
+const menuOverrideConfig = (type: string, y: number, isNested: boolean) => {
+  let config = "";
+  if (isNested) {
+    if (type?.match(/app|header|default/gi)) {
+      config += `top: ${y}px; `;
+    }
+  } else {
+    if (type === "footer") {
+      config += `bottom: 70px; `;
+    }
+    if (type === "header") {
+      config += "border-radius: 0 0 0.3rem 0.3rem; ";
+    }
+  }
+  return config;
+};
+
 const MenuLayout = styled.div.withConfig({
   componentId: "MenuLayout",
 })<MenuLayoutProps>`
@@ -22,13 +50,18 @@ const MenuLayout = styled.div.withConfig({
   padding-left: 1rem;
   border: 0.1px solid #44505e;
   box-sizing: border-box;
-  width: fit-content;
+  width: max-content;
   box-shadow: 0px 0px 10px rgba(10, 10, 10, 0.5);
   position: absolute;
   backdrop-filter: blur(5px);
-  transform: ${({ pos }) => `translate(${pos?.x}px,${pos?.y}px)`};
-  ${({ type }) =>
-    type === "header" ? `border-radius: 0 0 0.3rem 0.3rem;` : `border-radius: 0.3rem;`};
+  border-radius: 0.3rem;
+  transform: ${({ pos, type, className }) =>
+    className?.includes("nested")
+      ? `translate(${pos?.x}px,${nestedMenuY(type!)})`
+      : `translate(${pos?.x}px,${pos?.y}px)`};
+
+  ${({ type, pos, className }) =>
+    menuOverrideConfig(type!, pos!.y, className?.includes("nested")!)};
 
   .menu-section {
     padding: 0.2rem 0 0.25rem;
@@ -88,29 +121,43 @@ type nestedMenuType = {
   open: boolean;
   pos: { x: number; y: number } | null;
   menus?: MenuItemType[];
+  index?: number;
 };
 
 export function Menu({
   open,
   pos,
+  index,
   menus = desktopMenu,
   type = "default",
   handleCloseMenu = () => {},
+  className,
 }: MenuProps) {
+  const menuClassName = className ? className : "";
+
   const [nestedMenu, setNestedMenu] = useState<nestedMenuType | null>({
     open: false,
     pos: null,
     menus: [],
   });
 
-  const mouseEnter = (menus: MenuItemType[]) => (e: MouseEvent) => {
-    const { x, width, y } = e.currentTarget.getBoundingClientRect();
+  const mouseEnter = (menus: MenuItemType[], index: number) => (e: MouseEvent) => {
+    const { x, width, y, height, top, bottom, right, left } =
+      e.currentTarget.getBoundingClientRect();
+
+    console.log(top - pos!.y);
 
     setNestedMenu((prev) => ({
       ...prev,
       open: true,
-      pos: type === "footer" ? { x: pos!.x + width + 18, y: 0 } : { x: x + width, y: y - 3.5 },
+      pos:
+        type === "footer"
+          ? { x: width + 1, y: 0 }
+          : type.match(/app|header/gi)
+          ? { x: width, y: top - pos!.y }
+          : { x: width, y: top - pos!.y },
       menus,
+      index,
     }));
   };
 
@@ -123,6 +170,10 @@ export function Menu({
       setNestedMenu(null);
     }
   }, [open]);
+
+  useEffect(() => {
+    setNestedMenu(null);
+  }, [index]);
 
   function handleClickMenu(item: MenuItemValueType) {
     if (!item) return null;
@@ -139,7 +190,7 @@ export function Menu({
 
   return menus.length > 0 ? (
     <>
-      <MenuLayout pos={pos} type={type} open={open} className="belong-menu">
+      <MenuLayout pos={pos} type={type} open={open} className={`belong-menu ${menuClassName}`}>
         {menus.map((menuitem, index) => (
           <div
             className="menu-section"
@@ -154,10 +205,10 @@ export function Menu({
                   {value.type === "nested" ? (
                     <div
                       className="belong-menu with-icon"
-                      onMouseEnter={mouseEnter(value.menus ?? [])}
+                      onMouseEnter={mouseEnter(value.menus ?? [], index)}
                     >
                       <p>{key}</p>
-                      <span>{isIconExisted && value.icon!()}</span>
+                      {isIconExisted && <span>{value.icon!()}</span>}
                     </div>
                   ) : (
                     <div onMouseEnter={mouseEnterNull} className={`belong-menu ${value.type}`}>
@@ -169,7 +220,7 @@ export function Menu({
                       >
                         {key}
                       </p>
-                      <span>{isIconExisted && value.icon!()}</span>
+                      {isIconExisted && <span>{value.icon!()}</span>}
                     </div>
                   )}
                 </div>
@@ -177,16 +228,18 @@ export function Menu({
             })}
           </div>
         ))}
+        {nestedMenu && (
+          <Menu
+            type={type}
+            open={nestedMenu!.open}
+            pos={nestedMenu!.pos}
+            menus={nestedMenu!.menus ?? []}
+            className="nested"
+          />
+        )}
       </MenuLayout>
-      {nestedMenu && (
-        <Menu
-          type={type}
-          open={nestedMenu!.open}
-          pos={nestedMenu!.pos}
-          menus={nestedMenu!.menus ?? []}
-        />
-      )}
       <MenuOverlay
+        className={menuClassName}
         type={type}
         open={open}
         onClick={() => {
@@ -203,7 +256,7 @@ export function Menu({
 type OverlayProps = Omit<MenuLayoutProps, "pos">;
 
 const MenuOverlay = styled.div.withConfig({ componentId: "MenuOverlay" })<OverlayProps>`
-  display: ${({ open }) => (open ? "block" : "none")};
+  display: ${({ open, className }) => (open && className !== "nested" ? "block" : "none")};
   position: absolute;
   width: 200vw;
   height: 200vh;

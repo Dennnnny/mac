@@ -90,17 +90,20 @@ const RootContainerHeaderLayout = styled.div.withConfig({
   }
 `;
 
+type RootContainerHeaderProps = {
+  name: string;
+  size?: string;
+  handleDragging: Function;
+  handleEnlargeMaximumSize: Function;
+  handleFolderAction?: Function;
+};
 export default function RootContainerHeader({
   name,
   size = "sm",
   handleDragging,
   handleEnlargeMaximumSize,
-}: {
-  name: string;
-  size?: string;
-  handleDragging: Function;
-  handleEnlargeMaximumSize: Function;
-}) {
+  handleFolderAction,
+}: RootContainerHeaderProps) {
   const [press, setPress] = useState(false);
   const [tempPos, setTempPos] = useState({ x: 0, y: 0 });
 
@@ -130,7 +133,13 @@ export default function RootContainerHeader({
       ></div>
 
       <div className="left-area">
-        <div className="circle red">
+        <div
+          className="circle red"
+          onClick={() => {
+            setPress(false);
+            handleFolderAction && handleFolderAction!("folder.close");
+          }}
+        >
           <AiOutlineClose />
         </div>
         <div className="circle yellow">

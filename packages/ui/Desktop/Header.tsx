@@ -65,6 +65,7 @@ const HeaderLayout = styled.div.withConfig({ componentId: "HeaderLayout" })`
 export type MenuConfig = {
   pos?: { x: number; y: number };
   id?: string;
+  index?: number;
 } & DesktopHeaderType;
 
 export function DesktopHeader() {
@@ -72,22 +73,24 @@ export function DesktopHeader() {
 
   const [leftActive, setLeftActive] = useState(false);
 
-  const mouseOver = (data: DesktopHeaderType) => (e: MouseEvent) => {
+  const mouseOver = (data: DesktopHeaderType, index: number) => (e: MouseEvent) => {
     if (leftActive) {
       setCollect({
         ...data,
         pos: { x: e.currentTarget.getBoundingClientRect().x, y: 24 },
+        index,
       });
     }
   };
 
-  const myClick = (data: MenuConfig) => (e: MouseEvent) => {
+  const myClick = (data: MenuConfig, index: number) => (e: MouseEvent) => {
     if (leftActive) {
       setCollect(null);
     } else {
       setCollect({
         ...data,
         pos: { x: e.currentTarget.getBoundingClientRect().x, y: 24 },
+        index,
       });
     }
   };
@@ -120,8 +123,8 @@ export function DesktopHeader() {
               <div
                 key={leftyIndex}
                 className={`textItem ${collect?.id === leftyIndex ? "actived" : ""}`}
-                onMouseEnter={mouseOver(ITEMS)}
-                onMouseDown={myClick(ITEMS)}
+                onMouseEnter={mouseOver(ITEMS, index)}
+                onMouseDown={myClick(ITEMS, index)}
               >
                 <>{item.display}</>
               </div>
@@ -129,8 +132,8 @@ export function DesktopHeader() {
               <div
                 key={leftyIndex}
                 className={`iconItem ${collect?.id === leftyIndex ? "actived" : ""}`}
-                onMouseEnter={mouseOver(ITEMS)}
-                onMouseDown={myClick(ITEMS)}
+                onMouseEnter={mouseOver(ITEMS, index)}
+                onMouseDown={myClick(ITEMS, index)}
               >
                 <>{item.display}</>
               </div>
@@ -162,6 +165,7 @@ export function DesktopHeader() {
         open={(collect && collect?.type.length !== 0) || false}
         pos={collect?.pos ?? { x: 0, y: 0 }}
         menus={collect?.menus ?? []}
+        index={collect?.index}
         type="header"
         handleCloseMenu={() => {
           setCollect(null);

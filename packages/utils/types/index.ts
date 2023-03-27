@@ -32,6 +32,7 @@ export type AppProps = {
   action?: string | Function;
   menus?: MenuItemType[];
   mousePos?: Pos;
+  target?: string;
   // handleDragging?: (e: MouseEvent<HTMLElement>) => void;
   handleDragging?: ((e: MouseEvent<HTMLElement>) => void) | undefined;
   handleAppStatus?: () => void;
@@ -41,6 +42,7 @@ export type AppProps = {
 export type AppLayoutProps = {
   posX?: number;
   posY?: number;
+  menuPos?: Pos;
   actived?: boolean;
 };
 
@@ -61,6 +63,8 @@ export type MenuProps = {
   pos: { x: number; y: number } | null;
   type?: "default" | "header" | "footer" | "app";
   handleCloseMenu?: Function;
+  className?: string;
+  index?: number;
 };
 
 export type FooterType = {
@@ -80,6 +84,7 @@ export type DesktopHeaderType = {
 export type FolderProps = {
   size: { width: number; height: number };
   pos: { x: number; y: number };
+  [key: string]: string | number | Pos | SizeProp | boolean | [];
 };
 
 export type SizeProp = { width: number; height: number };
@@ -89,13 +94,15 @@ export type RootContainerProps = {
   children: JSX.Element;
   defaultSize: { width: number; height: number };
   defaultPos: { x: number; y: number };
-  // handleResize: Function;
+  handleFolderAction?: Function;
+  order?: number;
 };
 
 export type RootContainerLayoutProps = {
   size?: { width: number; height: number };
   pos?: { x: number; y: number };
   maxLength: number;
+  order?: number;
 };
 
 export interface ResizeComponentProps {

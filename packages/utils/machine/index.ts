@@ -1,9 +1,9 @@
-import { createMachine, assign, TransitionsConfig, DelayedTransitionDefinition } from "xstate";
+import { createMachine, assign } from "xstate";
+import { uniqueId } from "xstate/lib/utils";
 import { AppProps, MenuItemType, MenuProps, Pos, FolderProps, FooterType } from "../types";
 import { desktopApps } from "./desktop-apps";
-import { desktopFolders } from "./desktop-folders";
+import { desktopFolders, folderConfig } from "./desktop-folders";
 import { desktopFooters } from "./desktop-footers";
-
 export const desktopMachine = createMachine(
   {
     tsTypes: {} as import("./index.typegen").Typegen0,
@@ -26,7 +26,10 @@ export const desktopMachine = createMachine(
         | { type: "app.placed"; dX: number; dY: number }
         | { type: "contextMenu.setting"; pos: Pos; menus: MenuItemType[] }
         | { type: "contextMenu.clear" }
-        | { type: "footer.actived"; target: string; index: number },
+        | { type: "footer.actived"; target: string; index: number }
+        | { type: "folder.open"; target: string }
+        | { type: "folder.close"; index: number; order: number }
+        | { type: "folder.focus"; order: number },
     },
     id: "desktop",
     initial: "idle",
@@ -79,6 +82,18 @@ export const desktopMachine = createMachine(
           "footer.actived": {
             target: "idle",
             actions: ["setFooterActive"],
+          },
+          "folder.open": {
+            target: "idle",
+            actions: ["setFolderArray"],
+          },
+          "folder.focus": {
+            target: "idle",
+            actions: ["setFolderReorder"],
+          },
+          "folder.close": {
+            target: "idle",
+            actions: ["setFolderClose"],
           },
         },
       },
@@ -172,6 +187,56 @@ export const desktopMachine = createMachine(
           ...context,
           footers: [...restApps.slice(0, index), ...targetFooter, ...restApps.slice(index)],
         };
+      }),
+      setFolderArray: assign((context, event) => {
+        const { target } = event;
+
+        const targetFolder = folderConfig[target];
+
+        const currentFolders = context.folders;
+
+        const newFolders = [
+          ...currentFolders,
+          { ...targetFolder, id: uniqueId(), order: currentFolders.length },
+        ];
+
+        return { ...context, folders: newFolders };
+      }),
+      setFolderReorder: assign((context, event) => {
+        const currentOrder = event.order;
+
+        const newFolders = context.folders.map((folder) => {
+          if (folder.order === currentOrder)
+            return {
+              ...folder,
+              order: 0,
+            };
+          return {
+            ...folder,
+            order:
+              (folder.order as number) < currentOrder ? (folder.order as number) + 1 : folder.order,
+          };
+        });
+
+        return { ...context, folders: newFolders };
+      }),
+      setFolderClose: assign((context, event) => {
+        const removedIndex = event.index;
+        const removedOrder = event.order;
+
+        const prevFolders = [...context.folders];
+
+        const currentFolders = prevFolders
+          .slice(0, removedIndex)
+          .concat(prevFolders.slice(removedIndex + 1));
+
+        const removedFolders = currentFolders.map((folder) => ({
+          ...folder,
+          order:
+            (folder.order as number) > removedOrder ? (folder.order as number) - 1 : folder.order,
+        }));
+
+        return { ...context, folders: removedFolders };
       }),
     },
   }

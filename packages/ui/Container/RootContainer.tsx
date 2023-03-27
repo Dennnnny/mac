@@ -21,7 +21,7 @@ const RootContainerLayout = styled.div.withConfig({
   border: 1px solid #636465;
   border-radius: 0.25rem;
   box-shadow: 0px 0px 15px #080e19;
-  z-index: 21;
+  z-index: ${({ order }) => (order ? 21 - order! : 21)};
 
   > .body {
     height: calc(100% - 24px);
@@ -40,9 +40,11 @@ const RootContainerLayout = styled.div.withConfig({
 `;
 
 export function RootContainer(props: RootContainerProps) {
-  const { defaultSize, defaultPos, children } = props;
+  const { defaultSize, defaultPos, children, handleFolderAction, order } = props;
 
   const [resizeConfig, setResize] = useState({ pos: defaultPos, size: defaultSize });
+  const [isElarge, setIsEnlarge] = useState(false);
+  const [tempSizeConfig, setTempSizeCnnfig] = useState<typeof resizeConfig | null>(null);
   const { pos, size } = resizeConfig;
 
   function handleDragging(type: string, distance: number[]) {
@@ -51,14 +53,29 @@ export function RootContainer(props: RootContainerProps) {
   }
 
   function handleEnlargeMaximumSize() {
-    setResize({
-      pos: { x: 1, y: 25 },
-      size: { width: window.innerWidth - 1, height: window.innerHeight - 25 },
-    });
+    if (isElarge) {
+      setResize(tempSizeConfig!);
+      setIsEnlarge(false);
+    } else {
+      setResize({
+        pos: { x: 1, y: 25 },
+        size: { width: window.innerWidth - 1, height: window.innerHeight - 25 },
+      });
+      setTempSizeCnnfig(resizeConfig);
+      setIsEnlarge(true);
+    }
   }
 
   return (
-    <RootContainerLayout size={size} pos={pos} maxLength={maxLength}>
+    <RootContainerLayout
+      order={order}
+      size={size}
+      pos={pos}
+      maxLength={maxLength}
+      onMouseDown={() => {
+        handleFolderAction && handleFolderAction!("folder.focus");
+      }}
+    >
       <Border pos={pos} type="top" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="right" size={size} handleDragging={handleDragging} />
       <Border pos={pos} type="bottom" size={size} handleDragging={handleDragging} />
@@ -71,6 +88,7 @@ export function RootContainer(props: RootContainerProps) {
         name="文件夾"
         handleDragging={handleDragging}
         handleEnlargeMaximumSize={handleEnlargeMaximumSize}
+        handleFolderAction={handleFolderAction}
       />
       <div className="body">{children}</div>
     </RootContainerLayout>
