@@ -6,7 +6,7 @@ export const desktopMenu: MenuItemType[] = [
     新增檔案夾: {
       type: "actions",
       action: "",
-      icon: () => <></>,
+      icon: null,
     },
   },
   {
@@ -26,31 +26,50 @@ export const desktopMenu: MenuItemType[] = [
           Dennnny: {
             type: "disabled",
             action: "Denny",
-            icon: () => <></>,
+            icon: null,
           },
           拍照: {
             type: "actions",
             action: "photo",
-            icon: () => <></>,
+            icon: null,
           },
           掃描文件: {
             type: "actions",
             action: "scan",
-            icon: () => <></>,
+            icon: null,
           },
         },
       ],
     },
   },
   {
-    更改桌面背景: { type: "actions", action: () => {}, icon: () => <></> },
-    使用堆疊: { type: "actions", action: () => {}, icon: () => <></> },
+    更改桌面背景: { type: "actions", action: () => {}, icon: null },
+    使用堆疊: { type: "actions", action: () => {}, icon: null },
     排序方式: {
       type: "nested",
       icon: () => <FaCaretRight />,
       action: () => {},
+      menus: [
+        {
+          Testing: {
+            type: "actions",
+            action: "Denny",
+            icon: null,
+          },
+          tester2: {
+            type: "disabled",
+            action: "photo",
+            icon: null,
+          },
+          掃描文件: {
+            type: "actions",
+            action: "scan",
+            icon: null,
+          },
+        },
+      ],
     },
-    整理: { type: "actions", action: "", icon: () => <></> },
+    整理: { type: "actions", action: "", icon: null },
     整理方式: {
       type: "nested",
       icon: () => <FaCaretRight />,
@@ -59,7 +78,7 @@ export const desktopMenu: MenuItemType[] = [
     打開顯示方式選項: {
       type: "actions",
       action: () => {},
-      icon: () => <></>,
+      icon: null,
     },
   },
 ];

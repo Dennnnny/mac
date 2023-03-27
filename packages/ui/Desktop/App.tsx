@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { AppProps, AppLayoutProps } from "utils/types";
 import { Menu } from "./Menu";
@@ -12,9 +12,8 @@ const AppLayout = styled.div.withConfig({
   align-items: center;
   position: absolute;
   transform: ${({ posX, posY }) => `translate(${posX || "100"}px, ${posY || "100"}px)`};
-  padding: 0.2rem 0 0 0;
-  width: 80px;
-  padding: 0.5rem 0 0 0;
+  width: 50px;
+  height: 50px;
 
   > * {
     box-sizing: border-box;
@@ -62,8 +61,12 @@ const AppLayout = styled.div.withConfig({
       `};
   }
 
-  > :is(.belong-menu) {
-    width: max-content;
+  > :is(.belong-menu):not(.nested) {
+    transform: ${({ menuPos, posY }) =>
+      `translate(
+        calc(50% + ${menuPos!.x - 50 / 2}px), 
+        calc(50% + ${menuPos!.y - posY! - 50 / 2}px)
+      )`};
   }
 `;
 
@@ -88,6 +91,7 @@ export const DesktopApp = (props: AppProps) => {
       draggable={appMenu.open ? false : true}
       posX={posX}
       posY={posY}
+      menuPos={appMenu.pos}
       actived={isActived}
       onMouseDown={handleAppStatus}
       onDragStart={handleDragging}
@@ -95,7 +99,13 @@ export const DesktopApp = (props: AppProps) => {
       onDoubleClick={handleDbClick}
       onContextMenu={() => {
         if (!appMenu.open) {
-          setAppMenu({ open: true, pos: mousePos! });
+          setAppMenu({
+            open: true,
+            pos: {
+              x: mousePos!.x - posX,
+              y: mousePos!.y,
+            },
+          });
         }
       }}
       className="apps"
@@ -106,7 +116,7 @@ export const DesktopApp = (props: AppProps) => {
         type="app"
         open={appMenu.open}
         menus={menus}
-        pos={{ x: appMenu.pos!.x - posX + 40, y: appMenu.pos!.y - posY + 55 }}
+        pos={{ x: appMenu.pos.x, y: appMenu.pos.y }}
         handleCloseMenu={() => setAppMenu({ open: false, pos: { x: 0, y: 0 } })}
       />
     </AppLayout>

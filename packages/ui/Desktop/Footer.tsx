@@ -42,12 +42,6 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })<Foot
     box-sizing: border-box;
     transition: all 0.2s linear;
 
-    > :is(.belong-menu) {
-      text-align: left;
-      width: max-content;
-      bottom: 70px;
-    }
-
     > div.footer-item {
       position: relative;
       display: flex;

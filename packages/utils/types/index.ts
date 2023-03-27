@@ -42,6 +42,7 @@ export type AppProps = {
 export type AppLayoutProps = {
   posX?: number;
   posY?: number;
+  menuPos?: Pos;
   actived?: boolean;
 };
 
@@ -62,6 +63,8 @@ export type MenuProps = {
   pos: { x: number; y: number } | null;
   type?: "default" | "header" | "footer" | "app";
   handleCloseMenu?: Function;
+  className?: string;
+  index?: number;
 };
 
 export type FooterType = {
