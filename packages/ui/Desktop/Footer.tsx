@@ -41,6 +41,7 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })<Foot
     padding: 0.5rem 0.5rem 0.75rem 0.5rem;
     box-sizing: border-box;
     transition: all 0.2s linear;
+    z-index: 100;
 
     > div.footer-item {
       position: relative;
