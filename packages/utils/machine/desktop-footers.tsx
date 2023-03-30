@@ -493,14 +493,14 @@ export const desktopFooters: FooterType[] = [
     title: "GitHub",
     icon: "/github.svg",
     type: "link",
-    url: "https://github.com/Dennnnny",
+    url: "https://github.com/Dennnnny/mac",
     menus: [
       {
         開啟: {
           type: "link",
           action: "",
           icon: null,
-          url: "https://github.com/Dennnnny",
+          url: "https://github.com/Dennnnny/mac",
         },
       },
       {
