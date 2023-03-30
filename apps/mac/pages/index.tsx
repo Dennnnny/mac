@@ -167,6 +167,16 @@ export default function Web() {
           handleActive={(target: string, index: number) => {
             send({ type: "footer.actived", target, index });
           }}
+          handleAction={(type: string, payload: string) => {
+            if (type === "link") {
+              window.open(payload);
+              return;
+            }
+            if (type === "folder") {
+              console.log("open folder!", payload);
+              return;
+            }
+          }}
         />
         <Image
           src="/bg.jpeg"

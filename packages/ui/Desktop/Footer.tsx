@@ -1,13 +1,24 @@
 import styled from "styled-components";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { DesktopFooterProps, FooterType } from "utils/types";
+import { DesktopFooterProps, FooterType, MenuItemValueType } from "utils/types";
 import { Menu } from "./Menu";
 
 type FooterLayoutProps = {
   isEnabled: boolean;
   shouldOpen: boolean;
 };
+
+function footerActions(item: FooterType | MenuItemValueType) {
+  switch (item.type) {
+    case "link":
+      return item.url;
+    case "folder":
+      return item.target;
+    default:
+      return "";
+  }
+}
 
 const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })<FooterLayoutProps>`
   width: 100%;
@@ -123,16 +134,24 @@ const FooterLayout = styled.div.withConfig({ componentId: "FooterLayout" })<Foot
   }
 `;
 
-export function DesktopFooter({ footers, handleActive, isEnabled }: DesktopFooterProps) {
-  const [footerMenuOpen, setFooterMenuOpen] = useState<(FooterType & { index: number }) | null>(
-    null
-  );
+export function DesktopFooter({
+  footers,
+  handleActive,
+  isEnabled,
+  handleAction,
+}: DesktopFooterProps) {
+  const [footerMenu, setFooterMenu] = useState<(FooterType & { index: number }) | null>(null);
   const [animateIcons, setAnimateIcons] = useState<FooterType[]>([]);
 
-  const isFooterMenuExist = footerMenuOpen !== null;
+  const isFooterMenuExist = footerMenu !== null;
 
   const timerId = useRef<NodeJS.Timeout | null>(null);
-  const handleClick = (footer: FooterType, index: number) => {
+
+  const handleFooterClick = (
+    footer: FooterType,
+    index: number,
+    clickOnFooterMenu: boolean = false
+  ) => {
     setAnimateIcons((prev) => {
       const prevArrayTitle = prev.map((footer) => footer.title);
       if (prevArrayTitle.includes(footer.title)) return [...prev];
@@ -141,6 +160,8 @@ export function DesktopFooter({ footers, handleActive, isEnabled }: DesktopFoote
 
     timerId.current = setTimeout(() => {
       handleActive(footer.title, index);
+      handleAction(footer.type, footerActions(footer));
+      clickOnFooterMenu && setFooterMenu(null);
     }, 2000);
   };
 
@@ -163,10 +184,12 @@ export function DesktopFooter({ footers, handleActive, isEnabled }: DesktopFoote
                 animateIcons.map((item) => item.title).includes(footer.title) ? "jump" : ""
               }`}
               onClick={() => {
-                !footer.isActived ? handleClick(footer, index) : () => {};
+                footer.isActived
+                  ? handleAction(footer.type, footerActions(footer))
+                  : handleFooterClick(footer, index);
               }}
               onContextMenu={(e) => {
-                setFooterMenuOpen({ ...footer, index });
+                setFooterMenu({ ...footer, index });
               }}
             >
               <div className={`footer-title ${isFooterMenuExist ? "not-hover" : "hover"}`}>
@@ -184,11 +207,17 @@ export function DesktopFooter({ footers, handleActive, isEnabled }: DesktopFoote
           );
         })}
         <Menu
-          menus={footerMenuOpen?.menus}
+          menus={footerMenu?.menus}
           open={isFooterMenuExist}
-          pos={{ x: (footerMenuOpen?.index ?? 0) * 48, y: 0 }}
+          pos={{ x: (footerMenu?.index ?? 0) * 48, y: 0 }}
           handleCloseMenu={() => {
-            setFooterMenuOpen(null);
+            setFooterMenu(null);
+          }}
+          handleAction={(item: MenuItemValueType) => {
+            // item.type link | folder | actions?
+            footerMenu?.isActived
+              ? (handleAction(item.type, footerActions(item)), setFooterMenu(null))
+              : handleFooterClick(footerMenu!, footerMenu!.index, true);
           }}
           type="footer"
         />
