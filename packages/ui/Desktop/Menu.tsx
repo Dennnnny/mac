@@ -132,6 +132,7 @@ export function Menu({
   type = "default",
   handleCloseMenu = () => {},
   className,
+  handleAction,
 }: MenuProps) {
   const menuClassName = className ? className : "";
 
@@ -179,13 +180,19 @@ export function Menu({
     if (!item) return null;
     if (item.type !== "actions") return null;
 
-    if (typeof item.action === "function") {
-      item.action();
-      return;
-    } else {
-      console.log("click::", item.action);
+    if (handleAction != null) {
+      handleAction(item);
       return;
     }
+
+    if (typeof item.action === "function") {
+      item.action();
+      // return;
+    } else {
+      console.log("click::", item.action);
+      // return;
+    }
+    handleCloseMenu();
   }
 
   return menus.length > 0 ? (
@@ -215,7 +222,6 @@ export function Menu({
                       <p
                         onClick={() => {
                           handleClickMenu(value);
-                          handleCloseMenu();
                         }}
                       >
                         {key}

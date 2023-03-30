@@ -47,10 +47,12 @@ export type AppLayoutProps = {
 };
 
 export type MenuItemValueType = {
-  type?: "actions" | "nested" | "disabled";
+  type?: "actions" | "nested" | "disabled" | "link" | "folder";
   action?: Function | string;
   icon: (() => JSX.Element) | null;
   menus?: MenuItemType[];
+  url?: string;
+  target?: string;
 };
 
 export type MenuItemType = {
@@ -65,6 +67,7 @@ export type MenuProps = {
   handleCloseMenu?: Function;
   className?: string;
   index?: number;
+  handleAction?: Function;
 };
 
 export type FooterType = {
@@ -72,6 +75,9 @@ export type FooterType = {
   icon: string;
   menus: MenuItemType[];
   isActived: boolean;
+  type: "link" | "folder";
+  url?: string;
+  target?: string;
 };
 
 export type DesktopHeaderType = {
@@ -141,5 +147,6 @@ export type getDistanceProps = {
 export type DesktopFooterProps = {
   footers: FooterType[];
   handleActive: Function;
+  handleAction: Function;
   isEnabled: boolean;
 };

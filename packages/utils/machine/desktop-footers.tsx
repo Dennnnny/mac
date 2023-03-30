@@ -5,6 +5,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Finder",
     icon: "/finder.svg",
+    type: "folder",
     menus: [
       {
         新增Finder視窗: {
@@ -84,6 +85,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Safari",
     icon: "/safari.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -151,6 +153,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Docker",
     icon: "/docker.svg",
+    type: "folder",
     menus: [
       {
         開啟Docker: {
@@ -194,6 +197,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Firefox",
     icon: "/firefox.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -261,6 +265,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Chrome",
     icon: "/chrome.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -328,6 +333,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Slack",
     icon: "/slack.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -395,6 +401,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "YouTube",
     icon: "/youtube.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -462,64 +469,20 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Linkedin",
     icon: "/linkedin.svg",
+    type: "link",
+    url: "https://www.linkedin.com/in/wanyang-chang-75514213a/",
     menus: [
       {
-        選項: {
-          type: "nested",
-          action: "",
-          icon: () => <FaCaretRight />,
-          menus: [
-            {
-              從Docker中移除: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              在登入時打開: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              顯示於Finder: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-            },
-            {
-              指定到: {
-                type: "disabled",
-                action: () => {},
-                icon: null,
-              },
-              所有桌面: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              此桌面: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              無: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-            },
-          ],
+        開啟: {
+          type: "link",
+          icon: null,
+          url: "https://www.linkedin.com/in/wanyang-chang-75514213a/",
         },
       },
       {
-        顯示最近使用過的項目: {
-          type: "actions",
-          action: () => {},
-          icon: null,
-        },
-        打開: {
-          type: "actions",
-          action: () => {},
+        關於: {
+          type: "folder",
+          target: "Linkedin_about",
           icon: null,
         },
       },
@@ -529,64 +492,21 @@ export const desktopFooters: FooterType[] = [
   {
     title: "GitHub",
     icon: "/github.svg",
+    type: "link",
+    url: "https://github.com/Dennnnny",
     menus: [
       {
-        選項: {
-          type: "nested",
+        開啟: {
+          type: "link",
           action: "",
-          icon: () => <FaCaretRight />,
-          menus: [
-            {
-              從Docker中移除: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              在登入時打開: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              顯示於Finder: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-            },
-            {
-              指定到: {
-                type: "disabled",
-                action: () => {},
-                icon: null,
-              },
-              所有桌面: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              此桌面: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-              無: {
-                type: "actions",
-                action: () => {},
-                icon: null,
-              },
-            },
-          ],
+          icon: null,
+          url: "https://github.com/Dennnnny",
         },
       },
       {
-        顯示最近使用過的項目: {
-          type: "actions",
-          action: () => {},
-          icon: null,
-        },
-        打開: {
-          type: "actions",
-          action: () => {},
+        關於: {
+          type: "folder",
+          target: "GitHub_about",
           icon: null,
         },
       },
@@ -596,6 +516,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "App Stores",
     icon: "/app-store.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -663,6 +584,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "系統偏好設定",
     icon: "/setting.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -730,6 +652,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "Visual Studio Code",
     icon: "/vscode.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -797,6 +720,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "終端機",
     icon: "/terminal.svg",
+    type: "folder",
     menus: [
       {
         選項: {
@@ -864,6 +788,7 @@ export const desktopFooters: FooterType[] = [
   {
     title: "垃圾桶",
     icon: "/trashcan.svg",
+    type: "folder",
     menus: [
       {
         選項: {
