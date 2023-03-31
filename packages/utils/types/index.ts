@@ -90,7 +90,7 @@ export type DesktopHeaderType = {
 export type FolderProps = {
   size: { width: number; height: number };
   pos: { x: number; y: number };
-  [key: string]: string | number | Pos | SizeProp | boolean | [];
+  [key: string]: string | number | Pos | SizeProp | boolean | [] | JSX.Element;
 };
 
 export type SizeProp = { width: number; height: number };
@@ -102,6 +102,7 @@ export type RootContainerProps = {
   defaultPos: { x: number; y: number };
   handleFolderAction?: Function;
   order?: number;
+  title?: string;
 };
 
 export type RootContainerLayoutProps = {

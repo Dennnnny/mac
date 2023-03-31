@@ -13,9 +13,16 @@ export function Folder({ folder, handleFolderAction = () => {} }: FolderComponen
       defaultSize={folder.size}
       handleFolderAction={handleFolderAction}
       order={folder.order as number}
+      title={folder.name as string}
     >
       <>
-        {folder.name} FOLDER + {folder.id}
+        {folder.content != null ? (
+          folder.content
+        ) : (
+          <>
+            {folder.name} FOLDER + {folder.id}
+          </>
+        )}
       </>
     </RootContainer>
   );

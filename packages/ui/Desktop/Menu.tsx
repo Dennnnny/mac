@@ -178,21 +178,22 @@ export function Menu({
 
   function handleClickMenu(item: MenuItemValueType) {
     if (!item) return null;
-    if (item.type !== "actions") return null;
 
+    if (item.type === "actions") {
+      if (typeof item.action === "function") {
+        item.action();
+      } else {
+        console.log("click::", item.action);
+      }
+      handleCloseMenu();
+      return;
+    }
+
+    // link
     if (handleAction != null) {
       handleAction(item);
       return;
     }
-
-    if (typeof item.action === "function") {
-      item.action();
-      // return;
-    } else {
-      console.log("click::", item.action);
-      // return;
-    }
-    handleCloseMenu();
   }
 
   return menus.length > 0 ? (
