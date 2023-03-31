@@ -29,10 +29,11 @@ const RootContainerLayout = styled.div.withConfig({
     border-radius: 0 0 0.25rem 0.25rem;
 
     // put some style for now
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     color: white;
+    overflow: scroll;
   }
 
   ::before {
@@ -40,7 +41,7 @@ const RootContainerLayout = styled.div.withConfig({
 `;
 
 export function RootContainer(props: RootContainerProps) {
-  const { defaultSize, defaultPos, children, handleFolderAction, order } = props;
+  const { defaultSize, defaultPos, children, handleFolderAction, order, title } = props;
 
   const [resizeConfig, setResize] = useState({ pos: defaultPos, size: defaultSize });
   const [isElarge, setIsEnlarge] = useState(false);
@@ -85,7 +86,7 @@ export function RootContainer(props: RootContainerProps) {
       <Corner pos={pos} type="left-bottom" size={size} handleDragging={handleDragging} />
       <Corner pos={pos} type="right-bottom" size={size} handleDragging={handleDragging} />
       <RootContainerHeader
-        name="文件夾"
+        name={title || "文件夾"}
         handleDragging={handleDragging}
         handleEnlargeMaximumSize={handleEnlargeMaximumSize}
         handleFolderAction={handleFolderAction}

@@ -215,9 +215,17 @@ export function DesktopFooter({
           }}
           handleAction={(item: MenuItemValueType) => {
             // item.type link | folder | actions?
-            footerMenu?.isActived
-              ? (handleAction(item.type, footerActions(item)), setFooterMenu(null))
-              : handleFooterClick(footerMenu!, footerMenu!.index, true);
+            if (item.type === "link") {
+              footerMenu?.isActived
+                ? (handleAction(item.type, footerActions(item)), setFooterMenu(null))
+                : handleFooterClick(footerMenu!, footerMenu!.index, true);
+              return;
+            }
+
+            if (item.type === "folder") {
+              handleAction(item.type, footerActions(item));
+              setFooterMenu(null);
+            }
           }}
           type="footer"
         />

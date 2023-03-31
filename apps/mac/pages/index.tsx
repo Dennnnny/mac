@@ -173,7 +173,7 @@ export default function Web() {
               return;
             }
             if (type === "folder") {
-              console.log("open folder!", payload);
+              send({ type: "folder.open", target: payload });
               return;
             }
           }}
